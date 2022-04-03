@@ -1,19 +1,20 @@
 import Boton from "../Botones/BotonesNavbar";
 import {FaHome} from "react-icons/fa";
 import {BsFillPersonFill} from "react-icons/bs";
+import Link from 'next/link';
 
-export default function NavbarHome(){
+export default function NavbarHome({color}){
     return(
         <div>
 
-            <div className={"container"}>
+            <div className={"container"} style={{background: `${color}`}}>
                 <div className={"container-inside"}>
                     <div className={"logo"}>
                         <img src={"/logo.png"} width="250px"/>
                     </div>
                     <div className={"buttons"}>
-                        <Boton text={"Home"} icon={<FaHome/>}/>
-                        <Boton text={"LogIn"} icon={<BsFillPersonFill/>}/>
+                        <Link href="/"><a><Boton text={"Home"} icon={<FaHome/>}/></a></Link>
+                        <Link href="/login"><a><Boton text={"Log In"} icon={<BsFillPersonFill/>}/></a></Link>
                     </div>
                 </div>
             </div>
@@ -45,6 +46,10 @@ export default function NavbarHome(){
                 flex-direction: row;
                 align-items: center;
                 justify-content: flex-end;
+              }
+              
+              a{
+                text-decoration: none;
               }
 
             `}</style>

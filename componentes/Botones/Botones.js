@@ -3,7 +3,7 @@ export default function Botones({text, icon, back, size}){
         <div>
 
             <div className={"container"} style={{background: `${back}`}}>
-                <span className="text" style={{fontSize: `${size}px`}}>{icon ? <span style={{position: "relative", top: "2px", marginRight: "6px"}}>{icon}</span> : null}{text}</span>
+                <span className="text" style={{fontSize: `${size}`}}>{icon ? <span style={{position: "relative", top: "2px", marginRight: "6px"}}>{icon}</span> : null}{text}</span>
                 <div className="efecto"/>
             </div>
 

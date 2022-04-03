@@ -1,6 +1,7 @@
 import NavbarHome from "../componentes/NavbarHome";
 import Reading from "../componentes/Reading";
 import Button from "../componentes/Botones/Botones";
+import Link from "next/link";
 
 export default function Home() {
 
@@ -19,8 +20,11 @@ export default function Home() {
                         <Reading text={palabras}/>
                     </div>
                     <div className={"button"}>
-                        <Button text={"Regístrate"} back={"#ff5454"} size={25}/>
+                        <Link href={"registrar"}><a><Button text={"Regístrate"} back={"#ff5454"} size={25}/></a></Link>
                     </div>
+                </div>
+                <div>
+
                 </div>
             </div>
         </div>
@@ -32,13 +36,14 @@ export default function Home() {
           justify-content: center;
           align-items: center;
           width: 100%;
-          height: 85vh;
+          height: 100vh;
+          overflow: hidden;
         }
 
         .insideHero {
           width: 80%;
           height: 100%;
-          margin-top: 5vh;
+          margin-top: 21vh;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -61,6 +66,10 @@ export default function Home() {
           margin-top: 3rem;
           width: 80%;
           height: 10rem;
+        }
+        
+        a{
+          text-decoration: none;
         }
 
       `}</style>
