@@ -2,12 +2,29 @@ import Boton from "../Botones/BotonesNavbar";
 import {FaHome} from "react-icons/fa";
 import {BsFillPersonFill} from "react-icons/bs";
 import Link from 'next/link';
+import {useEffect, useState} from "react";
 
-export default function NavbarHome({color}){
+export default function NavbarHome({color, shadow}){
+
+    const [estilos, SetEstilos] = useState({})
+
+    useEffect(()=>{
+        if(shadow){
+            SetEstilos({
+                boxShadow: "0px 7px 14px -2px rgba(0,0,0,0.45)",
+                background: `${color}`
+            })
+        }else{
+            SetEstilos({
+                background: `${color}`
+            })
+        }
+    },[])
+
     return(
         <div>
 
-            <div className={"container"} style={{background: `${color}`}}>
+            <div className={"container"} style={estilos}>
                 <div className={"container-inside"}>
                     <div className={"logo"}>
                         <img src={"/logo.png"} width="250px"/>
@@ -30,7 +47,6 @@ export default function NavbarHome({color}){
                 color: #414141;
                 position: fixed;
                 z-index: 900;
-                
               }
 
               .container-inside {

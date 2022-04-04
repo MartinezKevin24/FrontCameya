@@ -4,7 +4,7 @@ import Login from "../componentes/Login";
 export default function login(){
     return(
         <div>
-            <NavbarHome/>
+            <NavbarHome />
             <div className={"container"}>
                 <div className={"formulario"}>
                     <Login/>

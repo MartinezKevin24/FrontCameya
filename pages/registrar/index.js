@@ -1,9 +1,9 @@
-import NavbarHome from "../componentes/NavbarHome";
+import NavbarHome from "../../componentes/NavbarHome";
 
-export default function registrar(){
+export default function index(){
     return(
         <div>
-            <NavbarHome color={"#6982f1"}/>
+            <NavbarHome color={"#6982f1"} shadow={true}/>
             <div className="container">
                 <div className="container-inside">
                     <div className="container-singup">
