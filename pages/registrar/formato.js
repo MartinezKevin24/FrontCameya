@@ -1,6 +1,7 @@
 import NavbarHome from "../../componentes/NavbarHome";
 import Botones from "../../componentes/Botones/Botones";
 import FormRegistro from "../../componentes/FormRegistro";
+import {useSelector} from "react-redux";
 
 export default function formulario(){
 

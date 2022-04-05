@@ -1,6 +1,24 @@
 import NavbarHome from "../../componentes/NavbarHome";
+import {useDispatch} from "react-redux";
+import Link from "next/link";
+import {roleClient, roleWorker} from "../../store/SingUp/action";
+import {useRouter} from "next/router";
 
 export default function index(){
+
+    const dispatch = useDispatch();
+    const router = useRouter();
+
+    const client = async () => {
+        await dispatch(roleClient())
+        return router.push("/registrar/formato")
+    }
+
+    const worker = async () => {
+        await dispatch(roleWorker())
+        return router.push("/registrar/formato")
+    }
+
     return(
         <div>
             <NavbarHome color={"#6982f1"} shadow={true}/>
@@ -9,13 +27,13 @@ export default function index(){
                     <div className="container-singup">
                         <p className={"title"}>Únete como contratante o contratista</p>
                         <div className="singup">
-                            <div className="hiring">
+                            <div className="hiring" onClick={()=>{client()}}>
                                 <div className="imagen">
                                     <img src={"/hiring.svg"} height={"100%"}/>
                                 </div>
                                 <p>¿En busca de talentos?</p>
                             </div>
-                            <div className="freelancer">
+                            <div className="freelancer" onClick={()=>{worker()}}>
                                 <div className="imagen">
                                     <img src={"/resume.svg"} height={"100%"}/>
                                 </div>
@@ -115,6 +133,14 @@ export default function index(){
               p {
                 margin-top: 1.5rem;
                 font-size: 16px;
+              }
+
+              a {
+                text-decoration: none;
+                color: #2d2d2d;
+                display: flex;
+                justify-content: center;
+                align-items: center;
               }
 
             `}</style>
