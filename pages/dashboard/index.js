@@ -1,21 +1,19 @@
 import NavbarHome from "../../componentes/NavbarHome";
-import {useDispatch} from "react-redux";
-import {roleClient, roleWorker} from "../../store/SingUp/action";
+import {useSelector, useDispatch} from "react-redux";
+import Button from "../../componentes/Botones/Botones";
 import {useRouter} from "next/router";
+import {BiLogOut} from "react-icons/bi";
+import {clearData} from "../../store/User/action";
 
 export default function index(){
 
+    const data = useSelector(state => { return state.LogIn.data});
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const client = async () => {
-        await dispatch(roleClient())
-        return router.push("/registrar/formato")
-    }
-
-    const worker = async () => {
-        await dispatch(roleWorker())
-        return router.push("/registrar/formato")
+    const logout = async () => {
+        await dispatch(clearData());
+        router.push("/")
     }
 
     return(
@@ -24,20 +22,28 @@ export default function index(){
             <div className="container">
                 <div className="container-inside">
                     <div className="container-singup">
-                        <p className={"title"}>Únete como contratante o contratista</p>
+                        <p className={"title"}>Perfil del Usuario</p>
                         <div className="singup">
-                            <div className="hiring" onClick={()=>{client()}}>
+                            <div className="hiring" >
                                 <div className="imagen">
-                                    <img src={"/hiring.svg"} height={"100%"}/>
+                                    <img src={"/perfil.png"} height={"100%"}/>
                                 </div>
-                                <p>¿En busca de talentos?</p>
                             </div>
-                            <div className="freelancer" onClick={()=>{worker()}}>
-                                <div className="imagen">
-                                    <img src={"/resume.svg"} height={"100%"}/>
-                                </div>
-                                <p>¿En busca de proyectos?</p>
+                            <div className="freelancer">
+                                <p>Nombres: {data.nombres}</p>
+                                <p>Apellidos: {data.apellidos}</p>
+                                <p>Tipo de ID: {data.tipoDocumento}</p>
+                                <p>Identificación: {data.cedula}</p>
+                                <p>Fecha Nacimiento: {data.fechaNacimiento}</p>
+                                <p>Email: {data.email}</p>
+                                <p>Telefono: {data.telefono}</p>
+                                {data.role === "trabajadores" ? <p>Tipo de Servicio: {data.tipoServicio}</p> : null}
+                                {data.role === "trabajadores" ? <p>Tarifa: {data.tarifa}</p> : null}
+                                <p>Tipo puntuación: {data.puntuacion}</p>
                             </div>
+                        </div>
+                        <div className="button" onClick={logout}>
+                            <Button text={"Cerrar Sesión"} icon={<BiLogOut/>} back={"#ff5454"}/>
                         </div>
                     </div>
                 </div>
@@ -79,7 +85,7 @@ export default function index(){
 
               .title {
                 font-family: Rubik;
-                font-size: 22px;
+                font-size: 25px;
                 font-weight: 600;
                 margin-bottom: 2rem;
               }
@@ -102,35 +108,36 @@ export default function index(){
               }
 
               .hiring, .freelancer {
-                width: 80%;
+                width: 100%;
                 justify-self: center;
                 font-family: Rubik;
                 font-size: 14px;
                 display: flex;
                 padding: 1.8rem 0;
-                justify-content: center;
                 align-items: center;
                 flex-direction: column;
                 font-weight: 500;
-                border: 2px dashed black;
-                background: #ff625f;
-                cursor: pointer;
               }
-
-              .hiring:hover, .freelancer:hover {
-                background: #c04545;
-                color: aliceblue;
+              
+              .freelancer{
+                align-items: flex-start;
               }
-
-              .imagen {
-                width: 80%;
-                height: 7rem;
-                display: flex;
+              
+              .hiring {
                 justify-content: center;
               }
 
+              .imagen {
+                height: 20rem;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                background: darkgray;
+                border-radius: 10rem;
+              }
+
               p {
-                margin-top: 1.5rem;
+                margin: 1rem 0;
                 font-size: 16px;
               }
 
@@ -140,6 +147,10 @@ export default function index(){
                 display: flex;
                 justify-content: center;
                 align-items: center;
+              }
+              
+              .button{
+                width: 90%;
               }
 
             `}</style>

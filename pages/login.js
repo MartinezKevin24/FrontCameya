@@ -1,13 +1,23 @@
 import NavbarHome from "../componentes/NavbarHome";
 import Login from "../componentes/Login";
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {clearData} from "../store/User/action";
 
 export default function login(){
+
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(clearData());
+    },[])
+
     return(
-        <div>
+        <div style={{position: "relative"}}>
             <NavbarHome />
             <div className={"container"}>
                 <div className={"formulario"}>
-                    <Login/>
+                    <Login />
                 </div>
             </div>
 

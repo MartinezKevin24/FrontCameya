@@ -3,10 +3,12 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import Error from "../Alertas/Error";
 import fetch from "isomorphic-fetch";
+import {useRouter} from "next/router";
 
 export default function FormRegistro(){
 
     const roles = useSelector(state => { return state.SingUp.role });
+    const router = useRouter();
 
     const [state, setState] = useState({
         nombres: "",
@@ -106,6 +108,8 @@ export default function FormRegistro(){
             statusResult: null
         })
 
+        let res = null;
+
         if(validar()){
             if(roles === "Contratante"){
                 const response = await fetch("http://localhost:8080/register/client",{
@@ -125,7 +129,8 @@ export default function FormRegistro(){
                         phone: state.celular
                     }
                 });
-                const res = await response.json()
+
+                res = await response.json()
 
                 setResult({
                     ...result,
@@ -153,7 +158,8 @@ export default function FormRegistro(){
                         tarifaHora: null
                     })
                 });
-                const res = await response.json()
+
+                res = await response.json()
 
                 setResult({
                     ...result,
@@ -163,10 +169,23 @@ export default function FormRegistro(){
 
             }
         }
+
+        setTimeout(()=>{
+            router.push("/")
+        },[8010])
+
     }
 
     return(
         <div className={"formulario"}>
+                {
+                    result.statusResult !== null ?
+                        <div className={"message"}>
+                            <div className="message-inside">
+                                <Error Message={result.message} color={result.statusResult}/>
+                            </div>
+                        </div> : null
+                }
                 <div className="title">
                     <h1>Registro de {roles}</h1>
                 </div>
@@ -231,7 +250,6 @@ export default function FormRegistro(){
 
                         : null}
                     <div className="form-button" onClick={handleSubmit}>
-                        {result.statusResult !== null ? <Error Message={result.message} color={result.statusResult}/> : null }
                         <Botones size={"100%"} text={"Regístrar"} back={"#ff5454"} />
                     </div>
                 </div>
@@ -298,6 +316,34 @@ export default function FormRegistro(){
                 padding: 0.2rem 0;
                 font-size: 16px;
                 width: 100%;
+              }
+              
+              .message{
+                position: fixed;
+                z-index: 999;
+                top: .0rem;
+                left: 30%;
+                display: flex;
+                justify-content: center;
+                width: 40%;
+              }
+              
+              .message-inside{
+                position: relative;
+                width: 50%;
+                top: -4rem;
+                animation: pop-up 8s ease-in-out;
+                animation-iteration-count: 1;
+              }
+              
+              @keyframes pop-up {
+                0%{
+                  top: -3.5rem;
+                }50%{
+                  top: .0rem;
+                }100%{
+                  top: -3.5rem;
+                }
               }
 
             `}</style>

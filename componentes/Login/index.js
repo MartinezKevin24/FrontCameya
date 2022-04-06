@@ -1,10 +1,16 @@
 import Button from "../Botones/Botones";
 import Link from "next/link";
 import {useState} from "react";
+import {useDispatch} from "react-redux";
+import {insertData} from "../../store/User/action";
 import fetch from "isomorphic-fetch";
 import Error from "../Alertas/Error"
+import {useRouter} from "next/router";
 
 export default function Login(){
+
+    const dispatch = useDispatch();
+    const router = useRouter();
 
     const [data, setData] = useState({
         email: "",
@@ -15,7 +21,9 @@ export default function Login(){
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState({
         message: null,
-        statusResult: null
+        statusResult: null,
+        token: null,
+        data:null
     });
 
     const handleChange = (e) => {
@@ -43,10 +51,13 @@ export default function Login(){
 
         e.preventDefault();
 
+        let res = null;
+
         setSuccess({
-            ...success,
             message: null,
-            statusResult: null
+            statusResult: null,
+            token: null,
+            data: null
         })
 
         if(validar()){
@@ -62,13 +73,22 @@ export default function Login(){
                 })
             })
 
-            const res = await response.json();
+            res = await response.json();
 
             setSuccess({
                 ...success,
                 message: res.message,
-                statusResult: res.success
+                statusResult: res.success,
+                token: res.token,
+                data: res.data
             });
+
+            console.log("data", success);
+
+            if(success.statusResult){
+                await dispatch(insertData({data: success.data, token: success.token}))
+                await router.push("/dashboard")
+            }
 
         }
 
@@ -77,6 +97,14 @@ export default function Login(){
     return(
         <div>
 
+            {
+                success.statusResult !== null ?
+                    <div className={"message"}>
+                        <div className="message-inside">
+                            <Error Message={success.message} color={success.statusResult}/>
+                        </div>
+                    </div> : null
+            }
             <div className={"container"} >
                 <div className={"container-inside"}>
                     <div className="title">
@@ -101,7 +129,6 @@ export default function Login(){
                         </select>
                     </div>
                     <div className="button" onClick={handleSubmit}>
-                        {success.statusResult !== null ? <Error Message={success.message} color={success.statusResult}/> : null }
                         <Button text={"Ingresar"} back={"#ff5454"}/>
                     </div>
                     <div>
@@ -109,7 +136,6 @@ export default function Login(){
                     </div>
                 </div>
             </div>
-
             <style jsx>{`
 
               .container {
@@ -187,6 +213,35 @@ export default function Login(){
                 border: 1px solid #505050;
                 padding: 0.2rem 0;
                 margin-top: 8px;
+              }
+              
+              .message{
+                position: absolute;
+                z-index: 999;
+                top: 1rem;
+                left: 30%;
+                display: flex;
+                justify-content: center;
+                width: 40%;
+                
+              }
+              
+              .message-inside{
+                width: 50%;
+                position: relative;
+                top: -4.3rem;
+                animation: pop-up 5s ease-in-out;
+                animation-iteration-count: 1;
+              }
+              
+              @keyframes pop-up {
+                0%{
+                  top: -4.3rem;
+                }50%{
+                  top: 1rem;
+                }100%{
+                  top: -4.3rem;
+                }
               }
 
             `}</style>
