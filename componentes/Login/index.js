@@ -1,24 +1,107 @@
 import Button from "../Botones/Botones";
 import Link from "next/link";
+import {useState} from "react";
+import fetch from "isomorphic-fetch";
+import Error from "../Alertas/Error"
 
 export default function Login(){
+
+    const [data, setData] = useState({
+        email: "",
+        password: "",
+        role: "clientes"
+    });
+
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState({
+        message: null,
+        statusResult: null
+    });
+
+    const handleChange = (e) => {
+        setData({
+            ...data,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const validar = () => {
+
+        let email = null;
+
+        if(!(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(data.email)){
+            email = "Formato de email incorrecto";
+        }
+
+        setError(email)
+
+        return !email
+
+    }
+
+    const handleSubmit = async(e) => {
+
+        e.preventDefault();
+
+        setSuccess({
+            ...success,
+            message: null,
+            statusResult: null
+        })
+
+        if(validar()){
+            const response = await fetch("http://localhost:8080/login",{
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: data.email,
+                    password: data.password,
+                    table: data.role
+                })
+            })
+
+            const res = await response.json();
+
+            setSuccess({
+                ...success,
+                message: res.message,
+                statusResult: res.success
+            });
+
+        }
+
+    }
+
     return(
         <div>
 
-            <div className={"container"}>
+            <div className={"container"} >
                 <div className={"container-inside"}>
                     <div className="title">
                         <span>Log In</span>
                     </div>
                     <div className="input-name">
                         <p>Email</p>
-                        <input type="text"/>
+                        <input type="text" name={"email"} value={data.email} onChange={handleChange}/>
+                        {error ? <Error Message={error}/> : null}
                     </div>
                     <div className="input-password">
                         <p>Contraseña</p>
-                        <input type="password"/>
+                        <input type="password" name={"password"} value={data.password} onChange={handleChange}/>
                     </div>
-                    <div className="button">
+                    <div className="form">
+                        <p>Rol:</p>
+                        <select name={"role"} value={data.role} onChange={handleChange}>
+                            <optgroup label="Roles">
+                                <option value="clientes">Contratante</option>
+                                <option value="trabajadores">Contratista</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div className="button" onClick={handleSubmit}>
+                        {success.statusResult !== null ? <Error Message={success.message} color={success.statusResult}/> : null }
                         <Button text={"Ingresar"} back={"#ff5454"}/>
                     </div>
                     <div>
@@ -85,6 +168,25 @@ export default function Login(){
               .singin {
                 font-weight: 500;
                 cursor: pointer;
+              }
+              
+              .form {
+                margin: 8px 0;
+                font-family: Rubik;
+                font-size: 14px;
+                width: 75%;
+              }
+              
+              select {
+                width: 100%;
+                height: 2rem;
+                font-family: Rubik;
+                font-size: 14px;
+                font-weight: 500;
+                outline: none;
+                border: 1px solid #505050;
+                padding: 0.2rem 0;
+                margin-top: 8px;
               }
 
             `}</style>
