@@ -7,7 +7,6 @@ export default function Reading({text}){
 
     useEffect(()=>{
         const interval = setInterval(()=>{
-            console.log(cont);
             if(cont != text.length-1){
                 SetPalabra(text[++cont])
             }else{
