@@ -59,21 +59,21 @@ export default function FormRegistro(){
             email = "Formato de email incorrecto";
         }
 
-        if(!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/g).test(state.password)){
-            password = "La contraseña debe tener\n" +
-                    "- Minimo 8 caracteres\n" +
-                    "- Un caracter en mayuscula y uno en minuscula\n" +
-                    "- Un número";
-            setState({...state, password: ""})
-        }
+        // if(!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/g).test(state.password)){
+        //     password = "La contraseña debe tener\n" +
+        //             "- Minimo 8 caracteres\n" +
+        //             "- Un caracter en mayuscula y uno en minuscula\n" +
+        //             "- Un número";
+        //     setState({...state, password: ""})
+        // }
 
         if(!(/^\d+/g).test(state.tarifa)){
             tarifa= "Número invalido";
         }
 
-        if(!(/^3(0[0-5]|1[0-9]|2[0-3]|5[0-1])[0-9]{7}$/).test(state.celular)){
-            celular = "Ingrese un número telefonico valido de Colombia";
-        }
+        // if(!(/^3(0[0-5]|1[0-9]|2[0-3]|5[0-1])[0-9]{7}$/).test(state.celular)){
+        //     celular = "Ingrese un número telefonico valido de Colombia";
+        // }
 
         if(state.password !== state.repeat_password){
             repeat_password= "Las contraseñas no coinciden";
@@ -332,7 +332,7 @@ export default function FormRegistro(){
                 position: relative;
                 width: 50%;
                 top: -4rem;
-                animation: pop-up 8s ease-in-out;
+                animation: pop-up 6s ease-in-out;
                 animation-iteration-count: 1;
               }
               

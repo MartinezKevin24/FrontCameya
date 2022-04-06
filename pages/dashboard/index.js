@@ -13,7 +13,7 @@ export default function index(){
 
     const logout = async () => {
         await dispatch(clearData());
-        router.push("/")
+        await router.push("/")
     }
 
     return(
@@ -21,31 +21,33 @@ export default function index(){
             <NavbarHome color={"#6982f1"} shadow={true}/>
             <div className="container">
                 <div className="container-inside">
-                    <div className="container-singup">
-                        <p className={"title"}>Perfil del Usuario</p>
-                        <div className="singup">
-                            <div className="hiring" >
-                                <div className="imagen">
-                                    <img src={"/perfil.png"} height={"100%"}/>
+                    {data !== null ?
+                        <div className="container-singup">
+                            <p className={"title"}>Perfil del Usuario</p>
+                            <div className="singup">
+                                <div className="hiring" >
+                                    <div className="imagen">
+                                        <img src={"/perfil.png"} height={"100%"}/>
+                                    </div>
+                                </div>
+                                <div className="freelancer">
+                                    <p>Nombres: {data.nombres}</p>
+                                    <p>Apellidos: {data.apellidos}</p>
+                                    <p>Tipo de ID: {data.tipoDocumento}</p>
+                                    <p>Identificación: {data.cedula}</p>
+                                    <p>Fecha Nacimiento: {data.fechaNacimiento}</p>
+                                    <p>Email: {data.email}</p>
+                                    <p>Telefono: {data.telefono}</p>
+                                    {data.role === "trabajadores" ? <p>Tipo de Servicio: {data.tipoServicio}</p> : null}
+                                    {data.role === "trabajadores" ? <p>Tarifa: {data.tarifa}</p> : null}
+                                    <p>Puntuación: {data.puntuacion}</p>
                                 </div>
                             </div>
-                            <div className="freelancer">
-                                <p>Nombres: {data.nombres}</p>
-                                <p>Apellidos: {data.apellidos}</p>
-                                <p>Tipo de ID: {data.tipoDocumento}</p>
-                                <p>Identificación: {data.cedula}</p>
-                                <p>Fecha Nacimiento: {data.fechaNacimiento}</p>
-                                <p>Email: {data.email}</p>
-                                <p>Telefono: {data.telefono}</p>
-                                {data.role === "trabajadores" ? <p>Tipo de Servicio: {data.tipoServicio}</p> : null}
-                                {data.role === "trabajadores" ? <p>Tarifa: {data.tarifa}</p> : null}
-                                <p>Tipo puntuación: {data.puntuacion}</p>
+                            <div className="button" onClick={logout}>
+                                <Button text={"Cerrar Sesión"} icon={<BiLogOut/>} back={"#ff5454"}/>
                             </div>
                         </div>
-                        <div className="button" onClick={logout}>
-                            <Button text={"Cerrar Sesión"} icon={<BiLogOut/>} back={"#ff5454"}/>
-                        </div>
-                    </div>
+                    : null}
                 </div>
             </div>
 
@@ -56,9 +58,9 @@ export default function index(){
                 justify-content: center;
                 align-items: center;
                 width: 100%;
-                height: 100vh;
                 overflow: hidden;
                 background: url("/Texture.jpg") repeat;
+                padding: 5rem 0;
               }
 
               .container-inside {
@@ -66,7 +68,6 @@ export default function index(){
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 100vh;
                 margin-top: 5vh;
               }
 

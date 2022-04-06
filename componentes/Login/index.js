@@ -54,6 +54,7 @@ export default function Login(){
         let res = null;
 
         setSuccess({
+            ...success,
             message: null,
             statusResult: null,
             token: null,
@@ -81,12 +82,12 @@ export default function Login(){
                 statusResult: res.success,
                 token: res.token,
                 data: res.data
-            });
+            })
 
-            console.log("data", success);
+            console.log(res)
 
-            if(success.statusResult){
-                await dispatch(insertData({data: success.data, token: success.token}))
+            if(res.success){
+                await dispatch(insertData({data: res.data, token: res.token}))
                 await router.push("/dashboard")
             }
 
@@ -229,18 +230,18 @@ export default function Login(){
               .message-inside{
                 width: 50%;
                 position: relative;
-                top: -4.3rem;
+                top: -6rem;
                 animation: pop-up 5s ease-in-out;
                 animation-iteration-count: 1;
               }
               
               @keyframes pop-up {
                 0%{
-                  top: -4.3rem;
+                  top: -6rem;
                 }50%{
                   top: 1rem;
                 }100%{
-                  top: -4.3rem;
+                  top: -6rem;
                 }
               }
 

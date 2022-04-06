@@ -1,7 +1,7 @@
 import {INSERT_DATA, CLEAR_DATA} from "./action";
 
 const initialState  = {
-    data: {},
+    data: null,
     token: null
 }
 
