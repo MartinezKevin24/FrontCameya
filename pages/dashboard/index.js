@@ -4,23 +4,37 @@ import Button from "../../componentes/Botones/Botones";
 import {useRouter} from "next/router";
 import {BiLogOut} from "react-icons/bi";
 import {clearData} from "../../store/User/action";
+import {useEffect, useState} from "react";
+import fetch from "isomorphic-fetch";
+import Cookies from "universal-cookie"
 
 export default function index(){
 
     const data = useSelector(state => { return state.LogIn.data});
+    const [state, setState] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
+    const cookie = new Cookies();
+
+    useEffect(()=>{
+        if(state){
+            cookie.remove("token")
+            router.reload();
+        }
+    },[state])
+
+    console.log(state)
 
     const logout = async () => {
         await dispatch(clearData());
-        await router.push("/")
+        setState(true)
     }
 
     return(
         <div>
             <NavbarHome color={"#6982f1"} shadow={true}/>
             <div className="container">
-                <div className="container-inside">
+                <div className="container-inside" style={data === null ? {height: "100vh", padding: "0"} : null}>
                     {data !== null ?
                         <div className="container-singup">
                             <p className={"title"}>Perfil del Usuario</p>
@@ -39,7 +53,8 @@ export default function index(){
                                     <p>Email: {data.email}</p>
                                     <p>Telefono: {data.telefono}</p>
                                     {data.role === "trabajadores" ? <p>Tipo de Servicio: {data.tipoServicio}</p> : null}
-                                    {data.role === "trabajadores" ? <p>Tarifa: {data.tarifa}</p> : null}
+                                    {data.role === "trabajadores" ? <p>Detalle del Servicio: {data.detalleServicio}</p> : null}
+                                    {data.role === "trabajadores" ? <p>Tarifa: {data.tarifaHora}</p> : null}
                                     <p>Puntuación: {data.puntuacion}</p>
                                 </div>
                             </div>
@@ -157,4 +172,41 @@ export default function index(){
             `}</style>
         </div>
     )
+}
+
+export async function getServerSideProps(context) {
+
+    if(context.req.headers.cookie === undefined){
+        return{
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+
+    const token = context.req.headers.cookie.slice(context.req.headers.cookie.indexOf("=")+1);
+
+    const response = await fetch("http://localhost:8080/users/auth",{
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            token
+        })
+    })
+
+    if(response.status !== 200){
+        return{
+            redirect: {
+                destination: '/',
+                permanent: false,
+            }
+        }
+    }
+
+    return {
+        props: {}, // will be passed to the page component as props
+    }
 }

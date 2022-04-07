@@ -1,16 +1,18 @@
 import Button from "../Botones/Botones";
 import Link from "next/link";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {insertData} from "../../store/User/action";
 import fetch from "isomorphic-fetch";
 import Error from "../Alertas/Error"
 import {useRouter} from "next/router";
+import Cookies from "universal-cookie"
 
 export default function Login(){
 
     const dispatch = useDispatch();
     const router = useRouter();
+    const cookies = new Cookies();
 
     const [data, setData] = useState({
         email: "",
@@ -23,8 +25,15 @@ export default function Login(){
         message: null,
         statusResult: null,
         token: null,
-        data:null
+        data:null,
+        ready: false
     });
+
+    useEffect(()=> {
+        if(success.ready){
+            router.push("/dashboard")
+        }
+    },[success.ready])
 
     const handleChange = (e) => {
         setData({
@@ -84,11 +93,13 @@ export default function Login(){
                 data: res.data
             })
 
-            console.log(res)
-
             if(res.success){
+                cookies.set("token", res.token, { path: '/' });
                 await dispatch(insertData({data: res.data, token: res.token}))
-                await router.push("/dashboard")
+                console.log(res)
+                setTimeout(()=>{
+                    setSuccess({...success, ready: true})
+                }, [5000])
             }
 
         }

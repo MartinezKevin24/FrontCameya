@@ -19,6 +19,7 @@ export default function FormRegistro(){
         password: "",
         repeat_password: "",
         tipo_servicio: "",
+        detalle_servicio: "",
         tarifa: "",
         celular: ""
     })
@@ -154,8 +155,9 @@ export default function FormRegistro(){
                         password: state.password,
                         puntuacion: null,
                         phone: state.celular,
-                        tipoServicio: null,
-                        tarifaHora: null
+                        tipoServicio: state.tipo_servicio,
+                        detalleServicio: state.detalle_servicio,
+                        tarifaHora: state.tarifa
                     })
                 });
 
@@ -238,7 +240,20 @@ export default function FormRegistro(){
                         <div>
                             <div className="form">
                                 <p>Tipo de servicio:</p>
-                                <input type="text" name={"tipo_servicio"} value={state.tipo_servicio} onChange={handleChange}/>
+                                <select name="tipo_servicio" value={state.tipo_servicio} onChange={handleChange}>
+                                    <optgroup label="Categoría de servicios">
+                                        <option value="Arte">Arte</option>
+                                        <option value="Culinario">Culinario</option>
+                                        <option value="Tutorias">Tutorías</option>
+                                        <option value="Limpieza">Limpieza</option>
+                                        <option value="Obrero">Obrero</option>
+                                        <option value="Transporte">Transporte</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div className="form">
+                                <p>Detalle del servicio:</p>
+                                <input type="text" name={"detalle_servicio"} value={state.detalle_servicio} onChange={handleChange}/>
                                 {error.tipo_servicio ? <Error Message={error.tipo_servicio}/> : null}
                             </div>
                             <div className="form">
