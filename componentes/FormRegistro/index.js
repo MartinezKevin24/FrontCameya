@@ -21,7 +21,8 @@ export default function FormRegistro(){
         tipo_servicio: "",
         detalle_servicio: "",
         tarifa: "",
-        celular: ""
+        celular: "",
+        fecha: ""
     })
 
     const [error, setError] = useState({
@@ -31,7 +32,8 @@ export default function FormRegistro(){
         repeat_password: "",
         tipo_servicio: "",
         tarifa: "",
-        celular: ""
+        celular: "",
+        fecha: ""
     })
 
     const [result, setResult] = useState({message: "", statusResult: null});
@@ -68,8 +70,10 @@ export default function FormRegistro(){
         //     setState({...state, password: ""})
         // }
 
-        if(!(/^\d+/g).test(state.tarifa)){
-            tarifa= "Número invalido";
+        if(roles === "Contratista"){
+            if(!(/^\d+/g).test(state.tarifa)){
+                tarifa= "Número invalido";
+            }
         }
 
         // if(!(/^3(0[0-5]|1[0-9]|2[0-3]|5[0-1])[0-9]{7}$/).test(state.celular)){
@@ -89,6 +93,7 @@ export default function FormRegistro(){
             tarifa,
             celular
         });
+
 
         return !id &&
             !email &&
@@ -111,25 +116,28 @@ export default function FormRegistro(){
 
         let res = null;
 
+
         if(validar()){
             if(roles === "Contratante"){
+
                 const response = await fetch("http://localhost:8080/register/client",{
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: {
-                        id: state.id,
-                        email: state.email,
-                        tipoDoc: state.tipo_id,
-                        nombres: state.nombres,
-                        apellidos: state.apellidos,
-                        fechaNacimiento: null,
-                        password: state.password,
-                        puntuacion: null,
-                        phone: state.celular
-                    }
-                });
+                    body: JSON.stringify(
+                        {
+                            id: state.id,
+                            email: state.email,
+                            tipoDoc: state.tipo_id,
+                            nombres: state.nombres,
+                            apellidos: state.apellidos,
+                            fechaNacimiento: state.fecha,
+                            password: state.password,
+                            puntuacion: null,
+                            phone: state.celular
+                        }
+                    )});
 
                 res = await response.json()
 
@@ -151,7 +159,7 @@ export default function FormRegistro(){
                         tipoDoc: state.tipo_id,
                         nombres: state.nombres,
                         apellidos: state.apellidos,
-                        fechaNacimiento: null,
+                        fechaNacimiento: state.fecha,
                         password: state.password,
                         puntuacion: null,
                         phone: state.celular,
@@ -174,7 +182,7 @@ export default function FormRegistro(){
 
         setTimeout(()=>{
             router.push("/")
-        },[8010])
+        },[6000])
 
     }
 
@@ -215,6 +223,11 @@ export default function FormRegistro(){
                         <p>Número de identificación:</p>
                         <input type="text" name={"id"} value={state.id} onChange={handleChange}/>
                         {error.id ? <Error Message={error.id}/> : null}
+                    </div>
+                    <div className="form">
+                        <p>Fecha de nacimiento:</p>
+                        <input type="date" name={"fecha"} value={state.fecha} onChange={handleChange}/>
+                        {error.fecha ? <Error Message={error.fecha}/> : null}
                     </div>
                     <div className="form">
                         <p>Email:</p>

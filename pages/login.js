@@ -1,15 +1,20 @@
 import NavbarHome from "../componentes/NavbarHome";
 import Login from "../componentes/Login";
 import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {clearData} from "../store/User/action";
+import {useRouter} from "next/router";
 
 export default function login(){
 
     const dispatch = useDispatch();
+    const data = useSelector(state => { return state.LogIn.data });
+    const router = useRouter();
 
     useEffect(()=>{
-        dispatch(clearData());
+        if(data){
+            router.push("/dashboard")
+        }
     },[])
 
     return(

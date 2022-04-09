@@ -1,68 +1,50 @@
-import NavbarHome from "../../componentes/NavbarHome";
 import {useSelector, useDispatch} from "react-redux";
-import Button from "../../componentes/Botones/Botones";
-import {useRouter} from "next/router";
-import {BiLogOut} from "react-icons/bi";
-import {clearData} from "../../store/User/action";
 import {useEffect, useState} from "react";
 import fetch from "isomorphic-fetch";
-import Cookies from "universal-cookie"
+import NavbarDashboard from "../../componentes/NavbarDashboard";
+import Cookies from "universal-cookie";
+import Cards from "../../componentes/Cards";
 
 export default function index(){
 
     const data = useSelector(state => { return state.LogIn.data});
-    const [state, setState] = useState(false);
-    const dispatch = useDispatch();
-    const router = useRouter();
+    const [servicios, setServicios] = useState([]);
     const cookie = new Cookies();
 
     useEffect(()=>{
-        if(state){
-            cookie.remove("token")
-            router.reload();
+        const getData = async () =>{
+            const result = await fetch("http://localhost:8080/search",{
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': cookie.get("token")
+                },
+                body: JSON.stringify({
+                    tipoServicio: null
+                })
+            })
+
+            const res = await result.json();
+            setServicios(res.data)
         }
-    },[state])
 
-    console.log(state)
+        console.log(servicios)
 
-    const logout = async () => {
-        await dispatch(clearData());
-        setState(true)
-    }
+    },[servicios])
 
     return(
         <div>
-            <NavbarHome color={"#6982f1"} shadow={true}/>
+            <NavbarDashboard color={"#6982f1"} shadow={true}/>
             <div className="container">
-                <div className="container-inside" style={data === null ? {height: "100vh", padding: "0"} : null}>
-                    {data !== null ?
-                        <div className="container-singup">
-                            <p className={"title"}>Perfil del Usuario</p>
-                            <div className="singup">
-                                <div className="hiring" >
-                                    <div className="imagen">
-                                        <img src={"/perfil.png"} height={"100%"}/>
-                                    </div>
+                <div className="container-inside">
+                    {
+                        servicios.length > 0 ?
+                            servicios.map((service, key)=>{
+                                <div id={key}>
+                                    <Cards nombre={service.nombres} apellido={service.apellidos} tipo={service.tipoServicio} detalle={service.detalle_servicio} tarifa={service.tarifa}/>
                                 </div>
-                                <div className="freelancer">
-                                    <p>Nombres: {data.nombres}</p>
-                                    <p>Apellidos: {data.apellidos}</p>
-                                    <p>Tipo de ID: {data.tipoDocumento}</p>
-                                    <p>Identificación: {data.cedula}</p>
-                                    <p>Fecha Nacimiento: {data.fechaNacimiento}</p>
-                                    <p>Email: {data.email}</p>
-                                    <p>Telefono: {data.telefono}</p>
-                                    {data.role === "trabajadores" ? <p>Tipo de Servicio: {data.tipoServicio}</p> : null}
-                                    {data.role === "trabajadores" ? <p>Detalle del Servicio: {data.detalleServicio}</p> : null}
-                                    {data.role === "trabajadores" ? <p>Tarifa: {data.tarifaHora}</p> : null}
-                                    <p>Puntuación: {data.puntuacion}</p>
-                                </div>
-                            </div>
-                            <div className="button" onClick={logout}>
-                                <Button text={"Cerrar Sesión"} icon={<BiLogOut/>} back={"#ff5454"}/>
-                            </div>
-                        </div>
-                        : null}
+                            }):null
+                    }
                 </div>
             </div>
 
@@ -80,9 +62,7 @@ export default function index(){
               .container-inside {
                 width: 100%;
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 5vh;
+                margin-top: 10rem;
               }
 
               .container-singup {

@@ -10,12 +10,17 @@ export default function index(){
 
     const client = async () => {
         await dispatch(roleClient())
-        return router.push("/registrar/formato")
+        setTimeout(()=>{
+            router.push("/registrar/formato")
+        },[700])
+
     }
 
     const worker = async () => {
         await dispatch(roleWorker())
-        return router.push("/registrar/formato")
+        setTimeout(()=>{
+            router.push("/registrar/formato")
+        },[700])
     }
 
     return(
