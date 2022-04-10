@@ -75,7 +75,6 @@ export default function Login(){
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
-
                 },
                 body: JSON.stringify({
                     email: data.email,
@@ -97,10 +96,9 @@ export default function Login(){
             if(res.success){
                 cookies.set("token", res.token, { path: '/' });
                 await dispatch(insertData({data: res.data, token: res.token}))
-                console.log(res)
                 setTimeout(()=>{
                     setSuccess({...success, ready: true})
-                }, [5000])
+                }, [2000])
             }
 
         }

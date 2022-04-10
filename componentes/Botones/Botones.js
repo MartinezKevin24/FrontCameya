@@ -1,10 +1,10 @@
-export default function Botones({text, icon, back, size}){
+export default function Botones({text, icon, back, size, efect}){
     return(
         <div>
 
             <div className={"container"} style={{background: `${back}`}}>
                 <span className="text" style={{fontSize: `${size}`}}>{icon ? <span style={{position: "relative", top: "2px", marginRight: "6px"}}>{icon}</span> : null}{text}</span>
-                <div className="efecto"/>
+                <div className="efecto" style={{background: `${efect}`}}/>
             </div>
 
             <style jsx>{`

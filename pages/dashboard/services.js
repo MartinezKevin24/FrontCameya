@@ -4,9 +4,8 @@ import fetch from "isomorphic-fetch";
 import NavbarDashboard from "../../componentes/NavbarDashboard";
 import Cookies from "universal-cookie";
 import Cards from "../../componentes/Cards";
-import Button from "../../componentes/Botones/Botones"
 
-export default function index(){
+export default function services(){
 
     const data = useSelector(state => { return state.LogIn.data});
     const [servicios, setServicios] = useState([]);
@@ -14,37 +13,21 @@ export default function index(){
     const cookie = new Cookies();
 
     useEffect(()=>{
+
         const getData = async () =>{
-            if(data.role === "clientes"){
-                const result = await fetch("http://localhost:8080/search",{
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': cookie.get("token")
-                    },
-                    body: JSON.stringify({
-                        tipoServicio: tipo === "Todos" ? null : tipo,
-                        role: data.role
-                    })
-                })
 
-                const res = await result.json();
-                setServicios(res.data)
-            }else{
+            const result = await fetch(`http://localhost:8080/services/${data.cedula}/${tipo}`,{
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': cookie.get("token"),
+                    'role': data.role
+                }
+            })
 
-                const result = await fetch(`http://localhost:8080/services/${data.cedula}/${tipo}`,{
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': cookie.get("token"),
-                        'role': data.role
-                    }
-                })
+            const res = await result.json();
+            setServicios(res.data)
 
-                const res = await result.json();
-                setServicios(res.data)
-
-            }
         }
 
         getData();
@@ -60,8 +43,7 @@ export default function index(){
             <NavbarDashboard color={"#6982f1"} shadow={true}/>
             <div className="container">
                 {data ? <div>
-                    {data.role === "clientes" ?
-                    <div className="categorias">
+                    {data.role === "clientes" ? <div className="categorias">
                         <div className="selector">
                             <select name="tipo" value={tipo} onChange={handleChange}>
                                 <option value={null}>Todos</option>
@@ -73,15 +55,14 @@ export default function index(){
                                 <option value="Transporte">Transporte</option>
                             </select>
                         </div>
-                    </div>: servicios ? <h1 className={"title"}>Algunos trabajos que te hemos encontrado</h1> : null}
+                    </div>:null}
                     <div className="container-inside">
                         <div className={servicios ? "services" : "not-found"}>
                             {
                                 servicios ?
                                     servicios.map((service, i)=>
-                                        data.role === "clientes" ? <Cards key={i} props={service}/> : <Cards key={i} props={service} looks={true}/>
-                                    ): <h1>{data.role === "clientes" ? <span>Ups, no contamos con Cameyadores para este tipo de servicio aún...</span>
-                                    : <span>Ups, no hemos encontrado trabajos para ti aún, vuelve más tarde...</span>}</h1>
+                                        <Cards key={i} props={service} eliminate={true}/>
+                                    ): <h1>Ups, aún no tienes ningun servicio {data.role === "clientes" ? <span>intenta contratar uno...</span> : <span>vuelve más tarde...</span>}</h1>
                             }
                         </div>
                     </div>
@@ -154,10 +135,6 @@ export default function index(){
                 font-family: Rubik;
               }
               
-              .title{
-                margin: 1rem 0 3rem 0;
-              }
-              
               @media screen and (max-width: 1610px){
                   .services{
                     grid-template-columns: 1fr 1fr 1fr;
@@ -196,6 +173,8 @@ export async function getServerSideProps(context) {
             'authorization': token
         }
     })
+
+
 
     if(response.status !== 200){
         return{

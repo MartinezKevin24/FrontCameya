@@ -20,6 +20,7 @@ export default function Error({Message, color}){
                 padding: .6rem 0;
                 justify-content: center;
                 align-items: center;
+                z-index: 999;
               }
 
               .container-inside {
