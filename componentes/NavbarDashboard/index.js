@@ -52,9 +52,9 @@ export default function NavbarHome({color, shadow}){
                         <img src={"/logo.png"} width="250px"/>
                     </div>
                     <div className={"buttons"}>
-                        <a href="/dashboard"><Boton text={"Home"} icon={<FaHome/>}/></a>
+                        <Link href={"/dashboard"}><a><Boton text={"Home"} icon={<FaHome/>}/></a></Link>
                         <Link href={"/dashboard/perfil"}><a><Boton text={"Perfil"} icon={<FaUserAlt/>}/></a></Link>
-                        <a href="/dashboard/services"><Boton text={"Servicios"} icon={<FaHandsHelping/>}/></a>
+                        <Link href={"/dashboard/services"}><a><Boton text={"Servicios"} icon={<FaHandsHelping/>}/></a></Link>
                         <div onClick={logout}><Boton text={"Log Out"} icon={<BiLogOut/>}/></div>
                     </div>
                 </div>

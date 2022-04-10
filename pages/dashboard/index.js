@@ -4,11 +4,11 @@ import fetch from "isomorphic-fetch";
 import NavbarDashboard from "../../componentes/NavbarDashboard";
 import Cookies from "universal-cookie";
 import Cards from "../../componentes/Cards";
-import Button from "../../componentes/Botones/Botones"
 
 export default function index(){
 
     const data = useSelector(state => { return state.LogIn.data});
+    const dispatch = useDispatch();
     const [servicios, setServicios] = useState([]);
     const [tipo, setTipo] = useState("Todos");
     const cookie = new Cookies();
@@ -47,9 +47,11 @@ export default function index(){
             }
         }
 
-        getData();
+        if(data !== null){
+            getData();
+        }
 
-    },[tipo])
+    },[tipo, data])
 
     const handleChange = (e) => {
         setTipo(e.target.value);
@@ -155,7 +157,7 @@ export default function index(){
               }
               
               .title{
-                margin: 1rem 0 3rem 0;
+                margin: 1rem 0 3rem 0q;
               }
               
               @media screen and (max-width: 1610px){

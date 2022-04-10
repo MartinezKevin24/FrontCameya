@@ -30,9 +30,11 @@ export default function services(){
 
         }
 
-        getData();
+        if(data !== null){
+            getData();
+        }
 
-    },[tipo])
+    },[tipo, data])
 
     const handleChange = (e) => {
         setTipo(e.target.value);

@@ -101,7 +101,7 @@ export default function Cards({props, eliminate, looks}){
                 estado: null
             })
             setModal(false)
-        }, [6000])
+        }, [3000])
 
     }
 
@@ -134,7 +134,7 @@ export default function Cards({props, eliminate, looks}){
                         <p className={"name"}>{props.nombres} {props.apellidos}</p>
                     </div>
                     <div className="tipo">
-                        <p>Servicio: {props.tipo}</p>
+                        <p>Servicio: {props.tipo_servicio}</p>
                     </div>
                     <div className="detalle">
                         <p>Detalle del servicio: {props.detalle_servicio}</p>

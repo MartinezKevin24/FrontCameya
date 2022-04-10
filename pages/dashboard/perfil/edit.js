@@ -1,18 +1,11 @@
 import NavbarDashboard from "../../../componentes/NavbarDashboard"
-import {useSelector, useDispatch} from "react-redux";
-import {useRouter} from "next/router";
-import {useState} from "react";
+import {useSelector} from "react-redux";
 import FormEdit from "../../../componentes/FormEdit";
 import fetch from "isomorphic-fetch";
-import Cookies from "universal-cookie"
 
 export default function index(){
 
     const data = useSelector(state => { return state.LogIn.data});
-    const [state, setState] = useState(false);
-    const dispatch = useDispatch();
-    const router = useRouter();
-    const cookie = new Cookies();
 
     return(
         <div>
