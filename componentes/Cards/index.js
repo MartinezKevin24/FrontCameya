@@ -21,9 +21,33 @@ export default function Cards({props, eliminate, looks}){
     const cookie = new Cookies();
     const data = useSelector(state => { return state.LogIn.data});
     const [error, setError] = useState(null);
+    const [errorFecha, setErrorFecha] = useState(true);
     const router = useRouter();
+    const d = new Date();
 
     const handleChange = (e) => {
+
+        if(e.target.name === "fecha"){
+            console.log("Hola")
+            let n = e.target.value;
+
+            let a = n.split("-");
+            console.log(a);
+            let b = a[2].split("T");
+            console.log(b)
+            let c = b[1].split(":");
+
+            const f_Selected = new Date(parseInt(a[0]), parseInt(a[1])-1, parseInt(b[0]), parseInt(c[0]), parseInt(c[1]));
+            console.log(f_Selected.toString())
+            const f_Now = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
+            console.log(f_Now);
+
+            if(f_Selected < f_Now){
+                setErrorFecha(false);
+                setError("La fecha ingresa es invalida");
+            }
+        }
+
         setState({
             ...state,
             [e.target.name]: e.target.value
@@ -63,9 +87,10 @@ export default function Cards({props, eliminate, looks}){
             estado: null
         })
 
-        setError(null)
+        setError(null);
 
-        if(state.direccion.length !==0 && state.fecha.length !==0){
+        if(state.direccion.length !==0 && state.fecha.length !==0 && errorFecha){
+
             const response = await fetch("http://localhost:8080/services", {
                 method: "POST",
                 headers: {
@@ -126,7 +151,7 @@ export default function Cards({props, eliminate, looks}){
                             {data.role === "clientes" ? <p>Detalle del servicio: <span>{props.detalle_servicio}</span></p> : <p>Contacto: <span>{props.telefono}</span></p>}
                         </div>
                         <div className="tarifa">
-                            <p>Total: <span>${props.total}</span></p>
+                            <p>Total Aprox: <span>${props.total}</span></p>
                         </div>
                     </div>
                     : <div className="container-inside">
@@ -159,7 +184,7 @@ export default function Cards({props, eliminate, looks}){
                             </div>
                             <div className="form">
                                 <p>Fecha deseada:</p>
-                                <input name={"fecha"} value={state.fecha} type="datetime-local" onChange={handleChange}/>
+                                <input name={"fecha"} value={state.fecha} type="datetime-local" min={`${d.getFullYear()}-${d.getMonth()}-${d.getDay()}T${d.getHours()}:${d.getMinutes()}`} onChange={handleChange}/>
                             </div>
                             <div className="form">
                                 <p>Estime una cantidad de horas a pagar:</p>
