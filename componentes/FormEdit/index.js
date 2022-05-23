@@ -6,6 +6,7 @@ import fetch from "isomorphic-fetch";
 import {useRouter} from "next/router";
 import Cookies from "universal-cookie";
 import {insertData} from "../../store/User/action";
+import axios from "axios";
 
 export default function FormEdit(){
 
@@ -21,6 +22,7 @@ export default function FormEdit(){
         detalle_servicio: data.detalleServicio,
         tarifa: data.tarifaHora,
         celular: data.telefono ,
+        imagen: data.foto_perfil
     })
 
     const [error, setError] = useState({
@@ -29,14 +31,22 @@ export default function FormEdit(){
         tipo_servicio: "",
         tarifa: "",
         celular: "",
+        imagen: ""
     })
 
     const [result, setResult] = useState({message: "", statusResult: null});
 
     const handleChange = (e) => {
-        setState({...state,
-            [e.target.name]: e.target.value
-        });
+
+        if(e.target.name === "imagen"){
+            setState({...state,
+                [e.target.name]: e.target.files
+            })
+        }else{
+            setState({...state,
+                [e.target.name]: e.target.value
+            });
+        }
     }
 
     const validar = () => {
@@ -44,8 +54,8 @@ export default function FormEdit(){
         let password = null,
             repeat_password = null,
             tarifa = null,
-            celular= null;
-
+            celular= null,
+            imagen = null;
 
         // if(!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/g).test(state.password)){
         //     password = "La contraseña debe tener\n" +
@@ -54,6 +64,11 @@ export default function FormEdit(){
         //             "- Un número";
         //     setState({...state, password: ""})
         // }
+
+        if(!(/(?:png|jpg|jpeg)/g).test(state.imagen[0].name)){
+            imagen = "El formato ingresa de imagen no es valido, intenta " +
+                "con un formato: png, jpg o jpeg";
+        }
 
         if(data.role === "trabajadores"){
             if(!(/^\d+/g).test(state.tarifa)){
@@ -78,14 +93,16 @@ export default function FormEdit(){
             password,
             repeat_password,
             tarifa,
-            celular
+            celular,
+            imagen
         });
 
 
         return !password &&
             !repeat_password &&
             !tarifa &&
-            !celular;
+            !celular &&
+            !imagen;
 
     }
 
@@ -102,59 +119,53 @@ export default function FormEdit(){
 
         let res = null;
 
-
         if(validar()){
+
+            const formData = new FormData();
+
             if(data.role === "trabajadores"){
 
-                const response = await fetch("http://localhost:8080/users/edit",{
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': cookie.get("token"),
-                    },
-                    body: JSON.stringify(
-                    {
-                        id: data.cedula,
-                        password: state.password,
-                        telefono: state.celular,
-                        role: data.role,
-                        tipoServicio: state.tipo_servicio,
-                        detalleServicio: state.detalle_servicio,
-                        tarifaHora: state.tarifa,
-                    }
-                )});
+                formData.append("id", data.cedula);
+                formData.append("password", state.password);
+                formData.append("telefono", state.celular);
+                formData.append("role", data.role);
+                formData.append("image", state.imagen[0]);
+                formData.append("tipoServicio", state.tipo_servicio);
+                formData.append("detalleServicio", state.detalle_servicio);
+                formData.append("tarifaHora", state.tarifa);
 
-                res = await response.json()
+                const response = await axios.post("http://localhost:8080/users/edit", formData, {
+                    headers:{
+                        'authorization': cookie.get("token"),
+                        'content-type': 'multipart/form-data'
+                    }
+                })
 
                 setResult({
                     ...result,
-                    message: res.message,
-                    statusResult: res.success
+                    message: response.data.message,
+                    statusResult: response.data.success
                 })
 
             }else if(data.role === "clientes"){
 
-                const response = await fetch("http://localhost:8080/users/edit",{
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': cookie.get("token"),
-                    },
-                    body: JSON.stringify(
-                        {
-                            id: data.cedula,
-                            password: state.password,
-                            telefono: state.celular,
-                            role: data.role
-                    }
-                )});
+                formData.append("id", data.cedula);
+                formData.append("password", state.password);
+                formData.append("telefono", state.celular);
+                formData.append("role", data.role);
+                formData.append("image", state.imagen[0]);
 
-                res = await response.json()
+                const response = await axios.post("http://localhost:8080/users/edit", formData, {
+                    headers:{
+                        'authorization': cookie.get("token"),
+                        'content-type': 'multipart/form-data'
+                    }
+                })
 
                 setResult({
                     ...result,
-                    message: res.message,
-                    statusResult: res.success
+                    message: response.data.message,
+                    statusResult: response.data.success
                 })
 
             }
@@ -199,6 +210,11 @@ export default function FormEdit(){
                 <h1>Edición de datos personales</h1>
             </div>
             <div className="data">
+                <div className="form">
+                    <p>Cargar Imagen:</p>
+                    <input type="file" name={"imagen"} value={state.image} onChange={handleChange}/>
+                    {error.imagen ? <Error Message={error.imagen}/> : null}
+                </div>
                 <div className="form">
                     <p>Contraseña:</p>
                     <input type="password" name={"password"} value={state.password} onChange={handleChange}/>

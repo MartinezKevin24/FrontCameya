@@ -21,30 +21,30 @@ export default function Cards({props, eliminate, looks}){
     const cookie = new Cookies();
     const data = useSelector(state => { return state.LogIn.data});
     const [error, setError] = useState(null);
-    const [errorFecha, setErrorFecha] = useState(true);
+    const [errorFecha, setErrorFecha] = useState(false);
     const router = useRouter();
     const d = new Date();
 
     const handleChange = (e) => {
 
         if(e.target.name === "fecha"){
-            console.log("Hola")
+
             let n = e.target.value;
 
             let a = n.split("-");
-            console.log(a);
             let b = a[2].split("T");
-            console.log(b)
             let c = b[1].split(":");
 
             const f_Selected = new Date(parseInt(a[0]), parseInt(a[1])-1, parseInt(b[0]), parseInt(c[0]), parseInt(c[1]));
-            console.log(f_Selected.toString())
             const f_Now = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
-            console.log(f_Now);
+
 
             if(f_Selected < f_Now){
-                setErrorFecha(false);
+                setErrorFecha(true);
                 setError("La fecha ingresa es invalida");
+            }else{
+                setErrorFecha(false);
+                setError("");
             }
         }
 
@@ -78,6 +78,36 @@ export default function Cards({props, eliminate, looks}){
 
     }
 
+    const aprobar = async(decision) => {
+
+        let estado = null;
+
+        if(decision){
+            estado = "aceptado";
+        }else{
+            estado = "rechazado"
+        }
+
+        const response = await fetch("http://localhost:8080/services/aprobar", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': cookie.get("token")
+            },
+            body: JSON.stringify({
+                id: props.id,
+                estado,
+            })
+        });
+
+        const res = await response.json();
+
+        if(res.success){
+            router.reload();
+        }
+
+    }
+
     const newService = async (e) => {
 
         e.preventDefault();
@@ -87,9 +117,11 @@ export default function Cards({props, eliminate, looks}){
             estado: null
         })
 
-        setError(null);
+        if(error){
+            setError("La fecha ingresa es invalida");
+        }
 
-        if(state.direccion.length !==0 && state.fecha.length !==0 && errorFecha){
+        if(state.direccion.length !==0 && state.fecha.length !==0 && !errorFecha){
 
             const response = await fetch("http://localhost:8080/services", {
                 method: "POST",
@@ -103,7 +135,6 @@ export default function Cards({props, eliminate, looks}){
                     direccion: state.direccion,
                     fechaProgramada: state.fecha,
                     horas: state.horas,
-                    estado: false,
                 })
             });
 
@@ -116,17 +147,25 @@ export default function Cards({props, eliminate, looks}){
             })
 
         }else{
-            setError("Los campos son obligatorios")
+
+            if(!errorFecha){
+                setError("Los campos son obligatorios");
+            }else{
+                setError("La fecha ingresa es invalida");
+            }
+
         }
 
-        setTimeout(()=>{
-            setSuccess({
-                ...success,
-                message: null,
-                estado: null
-            })
-            setModal(false)
-        }, [3000])
+        if(error === null || !errorFecha){
+            setTimeout(()=>{
+                setSuccess({
+                    ...success,
+                    message: null,
+                    estado: null
+                })
+                setModal(false)
+            }, [3000])
+        }
 
     }
 
@@ -168,7 +207,20 @@ export default function Cards({props, eliminate, looks}){
                         <p>Tarifa: ${props.tarifa_hora}</p>
                     </div>
                 </div>}
-                {eliminate ?
+                {props.estado_solicitud === "pendiente" && data.role === "clientes" ?
+                    <div>
+                        <Button text={"Pendiente Aprobación"} back={"transparent"} color={"#393939"} effect={"transparent"}/>
+                    </div>
+                    : props.estado_solicitud === "pendiente" && data.role === "trabajadores" ?
+                        <div className="buttons">
+                            <div className="button" onClick={()=>aprobar(true)}>
+                                <Button text={"Aceptar"} back={"#5db03e"} effect={"#b6f6a2"} size={"12px"}/>
+                            </div>
+                            <div className="button" onClick={()=>aprobar(false)}>
+                                <Button text={"Rechazar"} back={"#fd3535"} effect={"rgba(250,135,135,0.82)"} size={"12px"}/>
+                            </div>
+                        </div>
+                    : eliminate ?
                     <div className="contratar" onClick={eliminar}>
                         <Button text={data.role === "clientes" ? "Cancelar": "Rechazar"} back={"#f12626"}/>
                     </div> : looks ? null :
@@ -193,10 +245,10 @@ export default function Cards({props, eliminate, looks}){
                             {error ? <Alerta Message={error}/> : null}
                             <div className="buttons">
                                 <div className="button" onClick={newService}>
-                                    <Button text={"Aceptar"} back={"#5db03e"} efect={"#b6f6a2"} size={"12px"}/>
+                                    <Button text={"Aceptar"} back={"#5db03e"} effect={"#b6f6a2"} size={"12px"}/>
                                 </div>
                                 <div className="button" onClick={()=>setModal(false)}>
-                                    <Button text={"Cancelar"} back={"#fd3535"} efect={"rgba(250,135,135,0.82)"} size={"12px"}/>
+                                    <Button text={"Cancelar"} back={"#fd3535"} effect={"rgba(250,135,135,0.82)"} size={"12px"}/>
                                 </div>
                             </div>
                         </div>

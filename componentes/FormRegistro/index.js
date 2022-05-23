@@ -9,6 +9,7 @@ export default function FormRegistro(){
 
     const roles = useSelector(state => { return state.SingUp.role });
     const router = useRouter();
+    const d = new Date();
 
     const [state, setState] = useState({
         nombres: "",
@@ -36,9 +37,31 @@ export default function FormRegistro(){
         fecha: ""
     })
 
+    const [fechaVal, setFechaVal] = useState(false);
+
     const [result, setResult] = useState({message: "", statusResult: null});
 
     const handleChange = (e) => {
+
+        if(e.target.name === "fecha"){
+
+            let n = e.target.value;
+            let a = n.split("-");
+            const f1 = new Date(d.getFullYear()-18, d.getMonth(), d.getDate());
+            const f2 = new Date(a[0], a[1]-1, a[2]);
+
+            if(f2 > f1){
+                setFechaVal(true);
+            }else{
+                setFechaVal(false);
+                setError({
+                    ...error,
+                    fecha: ""
+                })
+            }
+
+        }
+
         setState({...state,
             [e.target.name]: e.target.value
         });
@@ -51,8 +74,12 @@ export default function FormRegistro(){
             password = null,
             repeat_password = null,
             tarifa = null,
-            celular= null;
+            celular= null,
+            fecha = null;
 
+        if(fechaVal){
+            fecha = "El usuario debe ser una persona mayor de edad";
+        }
 
         if(!(/^[0-9]+/g).test(state.id)){
             id = "Identificación invalida";
@@ -91,16 +118,17 @@ export default function FormRegistro(){
             password,
             repeat_password,
             tarifa,
-            celular
+            celular,
+            fecha
         });
-
 
         return !id &&
             !email &&
             !password &&
             !repeat_password &&
             !tarifa &&
-            !celular;
+            !celular &&
+            !fecha;
 
     }
 
@@ -116,8 +144,9 @@ export default function FormRegistro(){
 
         let res = null;
 
+        const validate = validar();
 
-        if(validar()){
+        if(validate){
             if(roles === "Contratante"){
 
                 const response = await fetch("http://localhost:8080/register/client",{
@@ -180,9 +209,11 @@ export default function FormRegistro(){
             }
         }
 
-        setTimeout(()=>{
-            router.push("/")
-        },[6000])
+        if(validate){
+            setTimeout(()=>{
+                router.push("/")
+            },[6000])
+        }
 
     }
 
