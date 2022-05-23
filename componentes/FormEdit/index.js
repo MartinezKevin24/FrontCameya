@@ -18,7 +18,7 @@ export default function FormEdit(){
     const [state, setState] = useState({
         password: "",
         repeat_password: "",
-        tipo_servicio: data.tipoServicio,
+        tipo_servicio: data.tipoServicio === "" ? "Arte" : data.tipoServicio,
         detalle_servicio: data.detalleServicio,
         tarifa: data.tarifaHora,
         celular: data.telefono ,
@@ -49,6 +49,8 @@ export default function FormEdit(){
         }
     }
 
+    console.log(state.imagen)
+
     const validar = () => {
 
         let password = null,
@@ -65,9 +67,12 @@ export default function FormEdit(){
         //     setState({...state, password: ""})
         // }
 
-        if(!(/(?:png|jpg|jpeg)/g).test(state.imagen[0].name)){
-            imagen = "El formato ingresa de imagen no es valido, intenta " +
-                "con un formato: png, jpg o jpeg";
+
+        if(state.imagen){
+            if(!(/(?:png|jpg|jpeg)/g).test(state.imagen[0].name)){
+                imagen = "El formato ingresa de imagen no es valido, intenta " +
+                    "con un formato: png, jpg o jpeg";
+            }
         }
 
         if(data.role === "trabajadores"){
@@ -123,13 +128,18 @@ export default function FormEdit(){
 
             const formData = new FormData();
 
+            if(state.imagen){
+                formData.append("image", state.imagen[0]);
+            }else{
+                formData.append("image", data.fotoPerfil);
+            }
+
             if(data.role === "trabajadores"){
 
                 formData.append("id", data.cedula);
                 formData.append("password", state.password);
                 formData.append("telefono", state.celular);
                 formData.append("role", data.role);
-                formData.append("image", state.imagen[0]);
                 formData.append("tipoServicio", state.tipo_servicio);
                 formData.append("detalleServicio", state.detalle_servicio);
                 formData.append("tarifaHora", state.tarifa);
@@ -153,7 +163,6 @@ export default function FormEdit(){
                 formData.append("password", state.password);
                 formData.append("telefono", state.celular);
                 formData.append("role", data.role);
-                formData.append("image", state.imagen[0]);
 
                 const response = await axios.post("http://localhost:8080/users/edit", formData, {
                     headers:{

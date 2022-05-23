@@ -5,6 +5,7 @@ import Alerta from "../Alertas/Error";
 import {useSelector} from "react-redux";
 import Cookies from "universal-cookie";
 import {useRouter} from "next/router";
+import {BsFillStarFill} from "react-icons/bs";
 
 export default function Cards({props, eliminate, looks}){
 
@@ -22,6 +23,8 @@ export default function Cards({props, eliminate, looks}){
     const data = useSelector(state => { return state.LogIn.data});
     const [error, setError] = useState(null);
     const [errorFecha, setErrorFecha] = useState(false);
+    const [rating, setRating] = useState(null);
+    const [ratingModal, setRatingModal] = useState(false);
     const router = useRouter();
     const d = new Date();
 
@@ -88,8 +91,8 @@ export default function Cards({props, eliminate, looks}){
             estado = "rechazado"
         }
 
-        const response = await fetch("http://localhost:8080/services/aprobar", {
-            method: "POST",
+        const response = await fetch("http://localhost:8080/services/approval", {
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': cookie.get("token")
@@ -169,6 +172,79 @@ export default function Cards({props, eliminate, looks}){
 
     }
 
+    const finished = async(e) => {
+
+        e.preventDefault();
+
+        setSuccess({...success,
+            message: null,
+            estado: null
+        });
+
+        const response = await fetch(`http://localhost:8080/services/complete/${props.id}`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': cookie.get("token")
+            }
+        });
+
+        const res = await response.json();
+
+        setSuccess({...success,
+            message: res.message,
+            estado: res.succes
+        });
+
+        if(res.succes){
+            setRatingModal(true);
+        }
+
+    }
+
+    const ratingStar = async(e) => {
+
+        setSuccess({...success,
+            message: null,
+            estado: null
+        });
+
+        if(rating){
+
+            e.preventDefault();
+
+            const response = await fetch(`http://localhost:8080/services/rating`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': cookie.get("token")
+                },
+                body: JSON.stringify({
+                    id: props.id,
+                    puntuacion: rating,
+                    role: data.role
+                })
+            });
+
+            const res = await response.json();
+
+            setSuccess({...success,
+                message: res.message,
+                estado: res.success
+            });
+
+            setRating(null);
+            setRatingModal(false);
+
+        }else{
+            setSuccess({...success,
+                message: "Ingresar la valoración es obligatorio",
+                estado: false
+            });
+        }
+
+    }
+
     return(
         <div>
             <div className={"container"}>
@@ -207,9 +283,12 @@ export default function Cards({props, eliminate, looks}){
                         <p>Tarifa: ${props.tarifa_hora}</p>
                     </div>
                 </div>}
-                {props.estado_solicitud === "pendiente" && data.role === "clientes" ?
+                {props.estado_servicio !== 1 ? props.estado_solicitud === "pendiente" && data.role === "clientes" ?
                     <div>
                         <Button text={"Pendiente Aprobación"} back={"transparent"} color={"#393939"} effect={"transparent"}/>
+                        {data.role === "clientes" ? <div className="contratar" onClick={eliminar}>
+                            <Button text={"Cancelar"} back={"#f12626"}/>
+                        </div>: null}
                     </div>
                     : props.estado_solicitud === "pendiente" && data.role === "trabajadores" ?
                         <div className="buttons">
@@ -220,12 +299,18 @@ export default function Cards({props, eliminate, looks}){
                                 <Button text={"Rechazar"} back={"#fd3535"} effect={"rgba(250,135,135,0.82)"} size={"12px"}/>
                             </div>
                         </div>
-                    : eliminate ?
-                    <div className="contratar" onClick={eliminar}>
-                        <Button text={data.role === "clientes" ? "Cancelar": "Rechazar"} back={"#f12626"}/>
-                    </div> : looks ? null :
-                    <div className="contratar" onClick={()=>setModal(true)}>
-                        <Button text={"Contratar"} back={"#ff5454"}/>
+                        : props.estado_solicitud === "aceptado" && data.role === "trabajadores" ?
+                                <div>
+                                    <Button text={"Trabajo en Proceso"} back={"transparent"} color={"#393939"} effect={"transparent"}/>
+                                </div> : eliminate ?
+                            <div className="contratar" onClick={finished}>
+                                <Button text={"Finalizar contrato"} back={"#f12626"}/>
+                            </div> : looks ? null :
+                                <div className="contratar" onClick={()=>setModal(true)}>
+                                    <Button text={"Contratar"} back={"#ff5454"}/>
+                                </div>:
+                    <div>
+                        <Button text={"Trabajo Finalizado"} back={"transparent"} color={"#393939"} effect={"transparent"}/>
                     </div>}
                 {modal ? <div className="container-modal">
                     <div className="container-modal-inside">
@@ -254,8 +339,75 @@ export default function Cards({props, eliminate, looks}){
                         </div>
                     </div>
                 </div>: null}
+                {ratingModal ? <div className="container-modal">
+                    <div className="container-modal-inside-star">
+                        <div className="info-star">
+                            <div className="stars">
+
+                                {[...Array(5)].map((star, i) => {
+
+                                    const ratingValue = i + 1;
+
+                                    return <label key={i}>
+                                        <input className={"star"} type="radio" name="rating" value={ratingValue} onClick={()=>{setRating(ratingValue)}}/>
+                                        <BsFillStarFill color={ratingValue <= rating ? "#ffc107" : "#9e9fa3"}/>
+                                    </label>
+                                })}
+
+                            </div>
+                            <div className="buttons">
+                                <div className="button" onClick={ratingStar}>
+                                    <Button text={"Aceptar"} back={"#5db03e"} effect={"#b6f6a2"} size={"12px"}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>:null}
             </div>
             <style jsx>{`
+
+              .info-star{
+                display: flex;
+                flex-direction: column;
+              }
+              
+              .stars{
+                display: flex;
+                margin: 2rem 0;
+              }
+              
+              .stars > label{
+                font-size: 40px;
+                color: #444;
+                padding: 10px;
+                float: right;
+                transition: all 0.2s ease;
+              }
+              
+              .star{
+                display: none;
+              }
+              
+              .star:not(:checked) > label:hover, .star:not(:checked) > label:hover > label{
+                color: #fd4;
+              }
+              
+              .star:checked > label{
+                color: #fd4;
+              }
+              
+              .container-modal-inside-star{
+                width: 30rem;
+                background: blanchedalmond;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                padding: 3rem 0;
+                -webkit-box-shadow: 0px 7px 14px -2px rgba(0, 0, 0, 0.64);
+                -moz-box-shadow: 0px 7px 14px -2px rgba(0, 0, 0, 0.64);
+                box-shadow: 0px 7px 14px -2px rgba(0, 0, 0, 0.64);
+              }
 
               .container {
                 background: blanchedalmond;

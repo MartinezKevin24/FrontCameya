@@ -45,7 +45,7 @@ export default function index(){
                             <div className="singup">
                                 <div className="hiring" >
                                     <div className="imagen">
-                                        <img src={data.fotoPerfil != null ? data.fotoPerfil : "./perfil.png"} height={"100%"}/>
+                                        <img src={data.fotoPerfil != "null" ? data.fotoPerfil : "/perfil.png"} height={"100%"}/>
                                     </div>
                                 </div>
                                 <div className="freelancer">

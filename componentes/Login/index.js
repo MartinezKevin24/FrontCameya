@@ -97,7 +97,15 @@ export default function Login(){
                 cookies.set("token", res.token, { path: '/' });
                 await dispatch(insertData({data: res.data, token: res.token}))
                 setTimeout(()=>{
-                    setSuccess({...success, ready: true})
+                    console.log("1x",success)
+                    setSuccess({
+                        ...success,
+                        message: res.message,
+                        statusResult: res.success,
+                        token: res.token,
+                        data: res.data,
+                        ready: true
+                    })
                 }, [2000])
             }
 
