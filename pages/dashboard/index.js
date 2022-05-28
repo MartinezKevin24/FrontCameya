@@ -189,7 +189,14 @@ export async function getServerSideProps(context) {
         }
     }
 
-    const token = context.req.headers.cookie.slice(context.req.headers.cookie.indexOf("=")+1);
+    const cookies = context.req.headers.cookie.split("; ");
+    let token;
+
+    cookies.map((cookie, i)=>{
+        if(cookie.split("=")[0] === "token"){
+            token = cookie.split("=")[1];
+        }
+    })
 
     const response = await fetch("http://localhost:8080/users/auth",{
         method: "GET",

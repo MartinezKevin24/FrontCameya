@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import Cookies from "universal-cookie";
 import {useRouter} from "next/router";
 import {BsFillStarFill} from "react-icons/bs";
+import emailjs from "emailjs-com";
 
 export default function Cards({props, eliminate, looks}){
 
@@ -57,6 +58,9 @@ export default function Cards({props, eliminate, looks}){
         });
     }
 
+    console.log("props:",props);
+    console.log("data:",data);
+
     const eliminar = async (e) => {
 
         e.preventDefault();
@@ -91,6 +95,31 @@ export default function Cards({props, eliminate, looks}){
             estado = "rechazado"
         }
 
+        let mensaje;
+
+        if(estado === "aceptado"){
+            mensaje = "¡Felicidades!, al cameyador se ha precido justa tu oferta y a aprobado la solicitud, ingresa a nuestra plataforma para más detalles.";
+        }else{
+            mensaje = "¡Lo sentimos!, al cameyador no ha aceptado la solicitud de trabajo, intenta mejorar un poco tu oferta.";
+        }
+
+        emailjs.send('service_3zr7ech', 'template_gwq7tqw',
+            {
+
+                user_name: `${props.nombres} ${props.apellidos}`,
+                user_email: `${props.email}`,
+                message: `${mensaje}`
+
+            }, '_Wwimg9mrP1lAhljl')
+
+            .then((result) => {
+                console.log(result.text);
+                router.reload();
+            }, (error) => {
+                console.log(error.text);
+                router.reload();
+            });
+
         const response = await fetch("http://localhost:8080/services/approval", {
             method: "PUT",
             headers: {
@@ -104,10 +133,6 @@ export default function Cards({props, eliminate, looks}){
         });
 
         const res = await response.json();
-
-        if(res.success){
-            router.reload();
-        }
 
     }
 
@@ -143,6 +168,21 @@ export default function Cards({props, eliminate, looks}){
 
             const res = await response.json();
 
+            emailjs.send('service_3zr7ech', 'template_gwq7tqw',
+                {
+
+                    user_name: `${props.nombres} ${props.apellidos}`,
+                    user_email: `${props.email}`,
+                    message: "¡Felicidades Cameyador! , tienes una nueva solicitud de trabajo. Dale un vistazo en nuestra plataforma de empleo."
+
+                }, '_Wwimg9mrP1lAhljl')
+
+                .then((result) => {
+                    console.log(result.text);
+                }, (error) => {
+                    console.log(error.text);
+                });
+
             setSuccess({
                 ...success,
                 message: res.message,
@@ -167,6 +207,11 @@ export default function Cards({props, eliminate, looks}){
                     estado: null
                 })
                 setModal(false)
+                setState({ ...state,
+                    direccion: "",
+                    fecha: "",
+                    horas: 1
+                })
             }, [3000])
         }
 
