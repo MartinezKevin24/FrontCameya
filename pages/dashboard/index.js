@@ -31,7 +31,6 @@ export default function index(){
                 const res = await result.json();
                 setServicios(res.data)
             }else{
-
                 const result = await fetch(`http://localhost:8080/services/${data.cedula}/${tipo}`,{
                     method: "GET",
                     headers: {

@@ -63,7 +63,7 @@ export default function services(){
                             {
                                 servicios ?
                                     servicios.map((service, i)=>
-                                        <Cards key={i} props={service} eliminate={true}/>
+                                        <Cards key={i} props={service} eliminate={true} looks={data.role === "trabajadores" ? true : false}/>
                                     ): <h1>Ups, aún no tienes ningun servicio {data.role === "clientes" ? <span>intenta contratar uno...</span> : <span>vuelve más tarde...</span>}</h1>
                             }
                         </div>
