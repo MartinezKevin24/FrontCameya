@@ -13,6 +13,8 @@ export default function index(){
     const [tipo, setTipo] = useState("Todos");
     const cookie = new Cookies();
 
+    console.log(servicios);
+
     useEffect(()=>{
         const getData = async () =>{
             if(data.role === "clientes"){

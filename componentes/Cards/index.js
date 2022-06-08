@@ -371,6 +371,9 @@ export default function Cards({props, eliminate, looks}){
                             <div className="tarifa">
                                 <p>Tarifa: ${props.tarifa_hora}</p>
                             </div>
+                            <div className="puntuación">
+                                <p>Puntuación: {props.puntuacion ? props.puntuacion : "Nuevo"}</p>
+                            </div>
                         </div>}
                     {props.estado_servicio !== 1 ? props.estado_solicitud === "pendiente" && data.role === "clientes" ?
                             <div>

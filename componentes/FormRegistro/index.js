@@ -244,7 +244,6 @@ export default function FormRegistro(){
                         <select name="tipo_id" value={state.tipo_id} onChange={handleChange}>
                             <optgroup label="Tipo de identificación">
                                 <option value="CC">Cédula de ciudadanía</option>
-                                <option value="TI">Tarjeta de identidad</option>
                                 <option value="CE">Cédula de extranjería</option>
                                 <option value="PA">Pasaporte</option>
                             </optgroup>
