@@ -57,7 +57,7 @@ export default function Reading({text}){
                 position: relative;
                 font-family: Rubik;
                 font-weight: 700;
-                font-size: 40px;
+                font-size: 24px;
               }
               
               @keyframes palabras {

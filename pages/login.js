@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {clearData} from "../store/User/action";
 import {useRouter} from "next/router";
 
-export default function login(){
+export default function ogin(){
 
     const dispatch = useDispatch();
     const data = useSelector(state => { return state.LogIn.data });
