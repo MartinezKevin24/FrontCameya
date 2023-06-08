@@ -13,7 +13,7 @@ export default function Reading({text}){
                 SetPalabra(text[0])
                 cont = 0;
             }
-        }, 10000)
+        }, 4000)
 
         return() => clearInterval(interval);
     },[])
@@ -24,7 +24,7 @@ export default function Reading({text}){
             <div className={"container"}>
                 <div className={"container-inside"}>
                     <div className={"inside"}>
-                        <p>{palabra}</p>
+                        <p className="text-2xl font-bold">{palabra}</p>
                     </div>
                 </div>
             </div>
@@ -47,17 +47,16 @@ export default function Reading({text}){
               }
               
               .inside{
-                animation: palabras 5s infinite alternate ;
+                animation: palabras 2s steps(11) infinite alternate ;
                 overflow: hidden;
                 border-right: 4px solid black;
+                margin: 0 1rem;
               }
 
               p {
                 color: #212121;
                 position: relative;
-                font-family: Rubik;
-                font-weight: 700;
-                font-size: 24px;
+                width: calc(100% + 6px);
               }
               
               @keyframes palabras {

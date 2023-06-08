@@ -10,14 +10,16 @@ import Link from "next/link";
 
 export default function Home() {
 
-    const palabras = ["¡Jardinero!", "¡Cocinero!", "¡Albañil!", "¡Bartender!", "¡Profesor!", "Etc..."];
+    const palabras = ["¡Jardinero!", "¡Cocineros!", "¡Carpintero!", "¡Bartender!", "¡Mecánicos!"];
 
   return (
     <div>
 			<div>
-				<NavbarHome/>
-				<div className={"containerHero"}>
-					<div className={"w-full h-[700px] bg-blue-600 flex items-center"}>
+				<div className="bg-black">
+					<NavbarHome/>
+				</div>
+				<div>
+					<div className={"w-full h-[700px] bg-gradient-to-b from-blue-900 via-blue-800 to-blue-500 flex items-center"}>
 						<div className="md:flex md:flex-row md:justify-between w-full container">
 							<div className="flex flex-col justify-center gap-y-6">
 								<div className={"text-5xl font-bold flex flex-col justify-center text-white leading-tight"}>
@@ -37,12 +39,6 @@ export default function Home() {
 								</div>
 							</div>
 						</div>
-						{/* <div className={"maquina"}>
-								<Reading text={palabras}/>
-						</div> */}
-						{/* <div className={"button"}>
-								<Link href={"registrar"}><a><Button text={"Regístrate"} back={"#ff5454"} size={25}/></a></Link>
-						</div> */}
 					</div>
 				</div>
 			</div>
