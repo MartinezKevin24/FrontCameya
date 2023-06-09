@@ -1,4 +1,4 @@
-import Boton from "../Botones/BotonesNavbar";
+import Boton from "../Button/BotonesNavbar";
 import {BiLogOut} from "react-icons/bi";
 import {useEffect, useState} from "react";
 import {FaUserAlt, FaHandsHelping, FaHome} from "react-icons/fa";

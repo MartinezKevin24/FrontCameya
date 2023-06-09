@@ -1,9 +1,9 @@
 import {useSelector, useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import fetch from "isomorphic-fetch";
-import NavbarDashboard from "../../componentes/NavbarDashboard";
+import NavbarDashboard from "../../components/NavbarDashboard";
 import Cookies from "universal-cookie";
-import Cards from "../../componentes/Cards";
+import Cards from "../../components/Cards";
 
 export default function index(){
 

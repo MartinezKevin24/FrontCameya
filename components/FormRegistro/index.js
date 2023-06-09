@@ -1,4 +1,4 @@
-import Botones from "../Botones/Botones";
+import Botones from "../Button";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import Error from "../Alertas/Error";

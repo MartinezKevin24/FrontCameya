@@ -1,4 +1,4 @@
-import NavbarHome from "../../componentes/NavbarHome";
+import NavbarHome from "../../components/Main/NavbarHome";
 import {useDispatch} from "react-redux";
 import {roleClient, roleWorker} from "../../store/SingUp/action";
 import {useRouter} from "next/router";

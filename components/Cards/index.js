@@ -1,4 +1,4 @@
-import Button from "../Botones/Botones";
+import Button from "../Button";
 import {useState} from "react";
 import fetch from "isomorphic-fetch";
 import Alerta from "../Alertas/Error";

@@ -1,5 +1,5 @@
-import NavbarHome from "../../componentes/NavbarHome";
-import FormRegistro from "../../componentes/FormRegistro";
+import NavbarHome from "../../components/Main/NavbarHome";
+import FormRegistro from "../../components/FormRegistro";
 
 export default function formulario(){
 

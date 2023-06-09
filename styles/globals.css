@@ -7,6 +7,9 @@
 @layer base {
     /* TODO add a .checkout class to <html> element for this */
     html, body, div#__next {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       height: 100%;
     }
 }

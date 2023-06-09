@@ -1,6 +1,6 @@
-import NavbarDashboard from "../../../componentes/NavbarDashboard"
+import NavbarDashboard from "../../../components/NavbarDashboard"
 import {useSelector, useDispatch} from "react-redux";
-import Button from "../../../componentes/Botones/Botones";
+import Button from "../../../components/Button";
 import {useRouter} from "next/router";
 import {BiLogOut, BiEdit} from "react-icons/bi";
 import {clearData} from "../../../store/User/action";

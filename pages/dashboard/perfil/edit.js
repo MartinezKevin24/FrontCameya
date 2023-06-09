@@ -1,6 +1,6 @@
-import NavbarDashboard from "../../../componentes/NavbarDashboard"
+import NavbarDashboard from "../../../components/NavbarDashboard"
 import {useSelector} from "react-redux";
-import FormEdit from "../../../componentes/FormEdit";
+import FormEdit from "../../../components/FormEdit";
 import fetch from "isomorphic-fetch";
 
 export default function index(){

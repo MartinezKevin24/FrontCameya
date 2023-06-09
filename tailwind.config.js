@@ -39,6 +39,11 @@ module.exports = {
           dark: '#677889',
           darkest: '#4E5A61',
         },
+        purple:{
+          DEFAULT: '#B35B8F',
+          dark: '#a64e82',
+          darkest: '#9c4377'
+        },
         red: {
           DEFAULT: '#AE1A20',
           light: '#F1D2D3'
@@ -177,7 +182,9 @@ module.exports = {
     animation: {
       autoClose: 'autoClose 10s ease-in',
       arrowRotate: 'arrowRotate 0.4s forwards',
-      spinSlow: 'spin 2s linear infinite'
+      spinSlow: 'spin 2s linear infinite',
+      slideInLeft: "slideInLeft 0.5s ease-in-out",
+      slideInRight: "slideInRight 0.5s ease-in-out"
     },
     keyframes: {
       autoClose: {
@@ -187,6 +194,14 @@ module.exports = {
       arrowRotate:{
         // '50%': {transform: 'rotate(90deg)'},
         '100%': {transform: 'rotate(180deg)'},
+      },
+      slideInLeft: {
+        "0%": { transform: "translateX(-100%)" },
+        "100%": { transform: "translateX(0)" }
+      },
+      slideInRight: {
+        "0%": { transform: "translateX(0)" },
+        "100%": { transform: "translateX(-100%)" }
       }
     }
     },
