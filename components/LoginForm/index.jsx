@@ -8,10 +8,22 @@ import {useDispatch} from "react-redux";
 import {insertData} from "../../store/User/action";
 import fetch from "isomorphic-fetch";
 import Error from "../Alertas/Error"
+import ApiRoutes from "constants/routes/api"
+import jwtdecode from "jwt-decode";
 import { GoogleLogin } from "@react-oauth/google";
 import {useRouter} from "next/router";
 import Cookies from "universal-cookie"
-import { Formik, Form, Field } from 'formik'
+import axios from "axios";
+import { Formik, Form } from 'formik'
+import * as Yup from "yup"
+
+const validationSchema = Yup.object({
+	"email": Yup.string()
+		.email("Por favor, ingrese un email valido.")
+		.required("Este campo es obligatorio."),
+	"password": Yup.string()
+		.required("Este campo es obligatorio.")
+})
 
 export default function LoginForm(){
 
@@ -19,15 +31,9 @@ export default function LoginForm(){
 	const router = useRouter();
 	const cookies = new Cookies();
 
-	const [data, setData] = useState({
-		email: "",
-		password: "",
-		role: "clientes"
-	});
-
 	const initialValues = {
-		email: "",
-		password: "",
+		"email": "",
+		"password": "",
 	}
 
 	const [error, setError] = useState(null);
@@ -45,81 +51,31 @@ export default function LoginForm(){
 		}
 	},[success.ready])
 
-	const handleChange = (e) => {
-		setData({
-			...data,
-			[e.target.name]: e.target.value
-		})
-	}
+	const onSubmit = async(values) => {
 
-	const validar = () => {
+		console.log(values, ApiRoutes.auth.login)
 
-		let email = null;
+		axios.post(ApiRoutes.auth.login, values,  { headers: {'Content-Type': 'application/json'} })
+			.then((response) => {
+				console.log(response)
+			}).catch((error) => console.log(error))
 
-		if(!(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(data.email)){
-			email = "Formato de email incorrecto";
-		}
+			// if(res.success){
+			// 	cookies.set("token", res.token, { path: '/' });
+			// 	await dispatch(insertData({data: res.data, token: res.token}))
+			// 	setTimeout(()=>{
+			// 			console.log("1x",success)
+			// 			setSuccess({
+			// 					...success,
+			// 					message: res.message,
+			// 					statusResult: res.success,
+			// 					token: res.token,
+			// 					data: res.data,
+			// 					ready: true
+			// 			})
+			// 	}, [2000])
+			// }
 
-		setError(email)
-
-		return !email
-
-	}
-
-	const handleSubmit = async(e) => {
-
-		e.preventDefault();
-
-		let res = null;
-
-		setSuccess({
-				...success,
-				message: null,
-				statusResult: null,
-				token: null,
-				data: null
-		})
-
-		if(validar()){
-			const response = await fetch("http://localhost:8080/login",{
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					email: data.email,
-					password: data.password,
-					table: data.role
-				})
-			})
-
-			res = await response.json();
-
-			setSuccess({
-				...success,
-				message: res.message,
-				statusResult: res.success,
-				token: res.token,
-				data: res.data
-			})
-
-			if(res.success){
-				cookies.set("token", res.token, { path: '/' });
-				await dispatch(insertData({data: res.data, token: res.token}))
-				setTimeout(()=>{
-						console.log("1x",success)
-						setSuccess({
-								...success,
-								message: res.message,
-								statusResult: res.success,
-								token: res.token,
-								data: res.data,
-								ready: true
-						})
-				}, [2000])
-			}
-
-		}
 
 	}
 
@@ -135,7 +91,8 @@ export default function LoginForm(){
 					<h1 className="py-8 font-bold text-3xl text-center">Log In to CameYa</h1>
 					<GoogleLogin
 						onSuccess={credentialResponse => {
-							console.log(credentialResponse);
+							const decode = jwtdecode(credentialResponse.credential)
+							axios.post()
 						}}
 						onError={() => {
 							console.log('Login Failed');
@@ -145,10 +102,11 @@ export default function LoginForm(){
 						<span className="w-full h-[1px] bg-gray-dark"/>
 						<span className="absolute text-sm bg-white px-2">or</span>
 					</div>
-					<Formik onSubmit={handleSubmit} initialValues={initialValues}>
+					<Formik onSubmit={onSubmit} initialValues={initialValues} validationSchema={validationSchema}>
 						{
 							({values, errors})=>(
 								<Form>
+									{console.log(errors)}
 									<div className="flex flex-col gap-4">
 										<FormField
 											name="email"

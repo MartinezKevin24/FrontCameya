@@ -9,7 +9,8 @@
       "src/*": ["src/*"],
       "assets/*": ["assets/*"],
       "tests/*": ["__tests__/*"],
-      "mocks/*": ["__mocks__/*"]
+      "mocks/*": ["__mocks__/*"],
+      "constants/*": ["constants/*"],
     }
   }
 }
