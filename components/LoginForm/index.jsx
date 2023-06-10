@@ -8,6 +8,7 @@ import {useDispatch} from "react-redux";
 import {insertData} from "../../store/User/action";
 import fetch from "isomorphic-fetch";
 import Error from "../Alertas/Error"
+import jwtdecode from "jwt-decode";
 import { GoogleLogin } from "@react-oauth/google";
 import {useRouter} from "next/router";
 import Cookies from "universal-cookie"
@@ -135,11 +136,13 @@ export default function LoginForm(){
 					<h1 className="py-8 font-bold text-3xl text-center">Log In to CameYa</h1>
 					<GoogleLogin
 						onSuccess={credentialResponse => {
-							console.log(credentialResponse);
+							const decode = jwtdecode(credentialResponse.credential)
+							console.log(decode);
 						}}
 						onError={() => {
 							console.log('Login Failed');
 						}}
+						
 					/>
 					<div className="relative flex justify-center items-center">
 						<span className="w-full h-[1px] bg-gray-dark"/>
