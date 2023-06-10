@@ -18,11 +18,10 @@ export default function Login(){
 
 	return(
 		<div>
-			{/* <div className="bg-slate-700">
-				<NavbarHome/>
-			</div> */}
-			<div className="min-h-screen flex justify-center items-center bg-slate-500">
-				<LoginForm/>
+			<div className="min-h-screen flex justify-center items-center bg-gradient-to-b from-blue-200 to-blue-300">
+				<div className="w-full h-screen md:h-auto">
+					<LoginForm/>
+				</div>
 			</div>
 		</div>
 	)

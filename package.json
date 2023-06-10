@@ -1,14 +1,16 @@
 {
   "name": "cameya",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev-secure": "node server.js"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.11.0",
     "autoprefixer": "^10.4.14",
     "axios": "^0.26.1",
     "classnames": "^2.3.2",
