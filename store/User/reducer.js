@@ -1,27 +1,31 @@
-import {INSERT_DATA, CLEAR_DATA} from "./action";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState  = {
     data: null,
     token: null
 }
 
-const LogIn = (state = initialState, action) => {
-    switch (action.type){
-        case INSERT_DATA:
-            return {
-                ...state,
-                data: action.payload.data,
-                token: action.payload.token
-            }
-        case CLEAR_DATA:
-            return {
-                ...state,
-                data: null,
-                token: null
-            }
-
-        default: return state;
+export const LogIn = createSlice({
+    name: "login",
+    initialState: initialState,
+    reducers: {
+        insertData: (state, action) => {
+          state.value = {
+            ...state.value,
+            data: action.payload.data,
+            token: action.payload.token
+          }
+        },
+        clearData: (state) => {
+          state.value = {
+            ...state.value,
+            data: null,
+            token: null
+          }
+        }
     }
-}
+})
 
-export default LogIn;
+export const { insertData, clearData } = LogIn.actions;
+
+export default LogIn.reducer;

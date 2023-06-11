@@ -56,12 +56,8 @@ module.exports = {
         aqua: '#ACCFD7'
       },
       boxShadow: {
-        // TODO how can I get this color from the colors above?
-        retro: '-1px 2px 0 0 #D3D9DB',
-        pear: '-1px 2px 0 0 #B7C240',
-        peardark: '-1px 2px 0 0 #A9B811',
         graydark: '-4px 8px 16 0 #617179',
-        yellowdark: '-1px 3px 0 0 #DFB01B'
+        'menu': '2px 3px 8px 0px rgba(0, 0, 0, 0.1)',
       },
       width:{
         '9.5': '38px',

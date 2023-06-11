@@ -1,11 +1,11 @@
 import {useSelector, useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import fetch from "isomorphic-fetch";
-import NavbarDashboard from "../../components/NavbarDashboard";
+import NavbarDashboard from "../../../components/NavbarDashboard";
 import Cookies from "universal-cookie";
-import Cards from "../../components/Cards";
+import Cards from "../../../components/Cards";
 
-export default function services(){
+export default function Services(){
 
     const data = useSelector(state => { return state.LogIn.data});
     const [servicios, setServicios] = useState([]);

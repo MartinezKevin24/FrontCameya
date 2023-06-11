@@ -1,22 +1,17 @@
-import {createStore} from "redux";
-import {combineReducers} from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import SingUp from "./SingUp/reducer";
-import LogIn from "./User/reducer";
-import { composeWithDevTools } from 'redux-devtools-extension';
+import signUpReducer from "./SingUp/reducer";
+import logInReducer from "./User/reducer";
 
 const persistConfig = {
     key: 'Persist-root',
     storage,
 }
 
-const reducers = combineReducers({SingUp, LogIn})
-const persistedReducer = persistReducer(persistConfig, reducers);
-
-export default () => {
-
-    return{
-        ...createStore(persistedReducer, composeWithDevTools())
-    }
-}
+export default configureStore({
+  reducer:{
+    login: logInReducer,
+    signup: signUpReducer,
+  }
+})
