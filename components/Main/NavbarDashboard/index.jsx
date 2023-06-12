@@ -11,13 +11,13 @@ export default function NavbarDashboard() {
       <div className="w-full py-2">
         <div className="relative">
           <div className="container w-full">
-            <div className="flex container justify-between">
+            <div className="flex container md:justify-between justify-center">
               <div>
-                <Image src={Logo} width={190} height={50} alt={"Cameya Logo"} />
+                <Image src={Logo} width={105} height={30} alt={"Cameya Logo"} />
               </div>
               <div className="hidden md:flex md:flex-row">
                 <ul className="flex flex-row gap-x-10 items-center">
-                  <li><Link href="/login"><a className="flex flex-row items-center gap-x-2 text-gray-darkest text-2xl"><MdLogout/></a></Link></li>
+                  <li><Link href="/login"><a className="flex flex-row items-center gap-x-2 hover:text-red text-gray-darkest text-2xl"><MdLogout/></a></Link></li>
                 </ul>
               </div>
             </div>
