@@ -15,6 +15,8 @@ export default function Login(){
 	// 	}
 	// },[])
 
+	console.log("Logins")
+
 	return(
 		<div>
 			<div className="min-h-screen flex justify-center items-center bg-gradient-to-b from-blue-200 to-blue-300">

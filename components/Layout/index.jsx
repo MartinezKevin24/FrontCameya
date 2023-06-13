@@ -16,4 +16,6 @@ export default function Layout({children}) {
         {children}
       </LayoutDashboard>
     )
+
+  return <div>{children}</div>
 }
