@@ -3,8 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import loginImage from "assets/Login/login-image.jpg"
 import FormField from 'components/forms/FormField'
-import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { insertData } from "store/User/reducer"; 
 import ApiRoutes from "constants/routes/api"
 import jwtdecode from "jwt-decode";
@@ -29,7 +28,7 @@ export default function LoginForm(){
 	const dispatch = useDispatch();
 	const { push } = useRouter();
 	const cookies = new Cookies();
-	const data = useSelector(state => { return state.login.value});
+	const data = useSelector(state => { return state});
 
 	const initialValues = {
 		"email": "",
@@ -41,6 +40,7 @@ export default function LoginForm(){
 			.then((response) => {
 				cookies.set("token", response.data.token, { path: '/' });
 				dispatch(insertData({data: response.data.message, token: response.data.token}))
+				console.log(data)
 				push("/dashboard");
 			}).catch((error) => console.log(error))
 	}
@@ -49,7 +49,7 @@ export default function LoginForm(){
 		<div className="flex flex-row justify-center md:drop-shadow-lg">
 			<div className="max-w-[400px] md:w-[290px] lg:w-[350px] h-125 relative overflow-hidden rounded-s-xl">
 				<div className="block w-[950px] h-156.5 absolute md:-left-52 lg:-left-40">
-					<Image src={loginImage} alt="imagen de logo" width={950} height={626} style={{objectFit: "contain"}}/>
+					<Image src={loginImage} alt="imagen de cameya" width={950} height={626} style={{objectFit: "contain"}}/>
 				</div>
 			</div>
 			<div className="bg-white h-screen md:w-110.5 md:h-125 w-full md:rounded-e-xl flex flex-col justify-between md:gap-0">

@@ -7,11 +7,11 @@ import Logo from 'assets/Logo.png'
 export default function NavbarDashboard() {
 
   return (
-    <div className='bg-white border-[2px] relative z-20'>
-      <div className="w-full py-2">
-        <div className="relative">
-          <div className="container w-full">
-            <div className="flex container md:justify-between justify-center">
+    <div className='bg-white border-[2px] h-[56px] relative z-20'>
+      <div className="w-full h-full">
+        <div className="relative h-full">
+          <div className="px-16 w-full h-full">
+            <div className="flex md:justify-between justify-center items-center h-full">
               <div>
                 <Image src={Logo} width={105} height={30} alt={"Cameya Logo"} />
               </div>

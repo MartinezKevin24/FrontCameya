@@ -1,5 +1,4 @@
 import {FaHome} from "react-icons/fa";
-import Logo from 'assets/logo.png'
 import {HiMenu, HiOutlineX} from "react-icons/hi"
 import LogoNegativo from 'assets/LogoNegativo.png'
 import {BsFillPersonFill} from "react-icons/bs";
