@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { AiFillStar, AiFillCamera } from 'react-icons/ai'
 import Image from 'next/image';
@@ -8,17 +8,25 @@ import ImageModal from 'components/Profile/ImageModal';
 export default function Profile() {
 
   const user = useSelector(state => state.login?.value?.data)
+  const [open, setOpen] = useState(false)
+
+  console.log(user)
 
   return (
     <div className='w-full'>
-      <ImageModal/>
+      {
+        open && <ImageModal setOpen={setOpen}/>
+      }
       <div className='w-full max-w-3xl py-14 px-10 bg-white rounded-md flex flex-col gap-11'>
-        <div className='flex justify-center relative'>
-          <div className='bg-gray-light flex rounded-full w-36 px-6 py-6'>
-            <Image src={perfil} alt={`Profile photo ${user?.name} ${user?.last_name}`} width={100} height={100}/>
-          </div>
-          <div className='absolute -bottom-4 text-4xl cursor-pointer'>
-            <AiFillCamera/>
+        <div className='flex justify-center'>
+          <div className='relative'>
+            <div className='bg-gray-light flex rounded-full w-36 overflow-hidden h-36 border-[2px] relative border-gray-darkest'>
+              <img src={user?.profile_picture} alt={`Profile photo ${user?.name} ${user?.last_name}`} className='absolute h-full'/>
+            </div>
+            <div className='absolute -bottom-2 right-2 text-4xl cursor-pointer text-gray-darkest'
+              onClick={()=>setOpen(true)}>
+              <AiFillCamera/>
+            </div>
           </div>
         </div>
         <div className='flex flex-col gap-2'>

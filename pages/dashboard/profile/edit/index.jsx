@@ -63,7 +63,7 @@ export default function Edit() {
 
     axios.put(ApiRoutes.profile.update, form_values, { headers: {'Content-Type': 'application/json'} })
       .then(async(response) => {
-        await dispatch(insertData({data: form_values, token: user.token}))
+        await dispatch(insertData({data: form_values}))
         push(PageRoutes.dashboard.index)
       })
       .catch((err) => console.log(err))
