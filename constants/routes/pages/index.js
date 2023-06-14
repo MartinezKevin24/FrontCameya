@@ -1,7 +1,8 @@
 const PageRoutes = {
   dashboard: {
     index: "/dashboard",
-    perfil: "/dashboard/profile",  
+    profile: "/dashboard/profile",
+    profile_edit: "/dashboard/profile/edit"
   }
 }
 

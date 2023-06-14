@@ -9,7 +9,8 @@ export default function Layout({children}) {
 
   if([
       PageRoutes.dashboard.index,
-      PageRoutes.dashboard.perfil
+      PageRoutes.dashboard.profile,
+      PageRoutes.dashboard.profile_edit,
     ].includes(pathname))
     return (
       <LayoutDashboard>
