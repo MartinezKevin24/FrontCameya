@@ -38,9 +38,9 @@ export default function SideNavBar() {
   }
 
   return (
-    <div className='md:max-w-[270px] md:w-68 max-w-[60px] relative bg-white pt-5 height top-0 z-0 drop-shadow-sm'>
+    <div className='md:max-w-[270px] md:w-68 max-w-[60px] fixed bg-white border-r-[1px] mt-[56px] pt-5 height top-0 z-0 drop-shadow-sm'>
       <div className='h-full'>
-        <div className='flex flex-col justify-between h-full'>
+        <div className='flex flex-col justify-between height pb-4'>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center justify-center md:justify-normal gap-3 bg-gray-extralight border-[1px] rounded-xl md:py-2 py-1 md:px-3 md:mx-3 mx-1'>
               <Link href={PageRoutes.dashboard.perfil} passHref>
@@ -63,14 +63,16 @@ export default function SideNavBar() {
             <ul className='my-4 flex flex-col'>
               {
                 routes.map((route, i) => ( 
-                  <li key={i} className={classNames(['px-4 py-3 relative cursor-pointer hover:text-blue-pale font-bold flex items-center gap-x-3', 
-                    {"text-blue-pale bg-white md:w-[275px] md:shadow-menu rounded-e-xl md:mb-2" : pathActive(route.path)}, 
-                    { "text-gray-darkest": !pathActive(route.path)}])}>
-                    <span className='mb-[3px] text-xl'>{route.icon}</span>
-                    <span className={classNames(['w-1 rounded-e-lg h-2/4 block bg-blue-pale absolute left-0', 
-                      { "hidden" : !pathActive(route.path)}])}/>
-                    <span className='hidden md:block'>{route.name}</span>
-                  </li>
+                  <Link href={route.path} passHref key={i}>
+                    <li key={i} className={classNames(['px-4 py-3 relative cursor-pointer hover:text-blue-pale font-bold flex items-center gap-x-3', 
+                      {"text-blue-pale bg-white md:w-[275px] md:shadow-menu rounded-e-xl md:mb-2" : pathActive(route.path)}, 
+                      { "text-gray-darkest": !pathActive(route.path)}])}>
+                      <span className='mb-[3px] text-xl'>{route.icon}</span>
+                      <span className={classNames(['w-1 rounded-e-lg h-2/4 block bg-blue-pale absolute left-0', 
+                        { "hidden" : !pathActive(route.path)}])}/>
+                      <span className='hidden md:block'>{route.name}</span>
+                    </li>
+                  </Link>
                   )
                 )
               }
@@ -89,7 +91,7 @@ export default function SideNavBar() {
       <style jsx>{`
         
         .height{
-          height: calc(100vh - 56px);
+          min-height: calc(100vh - 56px);
         }
         
       `}</style>

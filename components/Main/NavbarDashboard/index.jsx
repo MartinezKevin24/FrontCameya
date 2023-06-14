@@ -7,7 +7,7 @@ import Logo from 'assets/Logo.png'
 export default function NavbarDashboard() {
 
   return (
-    <div className='bg-white border-[2px] h-[56px] relative z-20'>
+    <div className='bg-white border-[2px] h-[56px] fixed w-full z-20'>
       <div className="w-full h-full">
         <div className="relative h-full">
           <div className="px-16 w-full h-full">

@@ -40,7 +40,6 @@ export default function LoginForm(){
 			.then((response) => {
 				cookies.set("token", response.data.token, { path: '/' });
 				dispatch(insertData({data: response.data.message, token: response.data.token}))
-				console.log(data)
 				push("/dashboard");
 			}).catch((error) => console.log(error))
 	}
@@ -60,7 +59,7 @@ export default function LoginForm(){
 							onSuccess={credentialResponse => {
 								const decode = jwtdecode(credentialResponse.credential)
 								axios.post(ApiRoutes.auth.google, decode, { headers: {'Content-Type': 'application/json'}} )
-									.then((response) => console.log(response))
+									.then((response) => console.log("Done"))
 									.catch((error) => console.log(error))
 							}}
 							onError={() => {

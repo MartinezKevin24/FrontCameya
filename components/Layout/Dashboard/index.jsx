@@ -4,11 +4,11 @@ import SideNavBar from 'components/Main/SideNavBar'
 
 export default function Dashboard({children}) {
   return (
-    <div className='bg-gray-lightest h-screen overflow-y-auto'>
+    <div className='bg-gray-lightest min-h-screen'>
       <NavbarDashboard/>
-      <div className='flex flex-row'>
+      <div className='flex flex-row overflow-hidden w-full'>
         <SideNavBar/>
-        <div className='mx-10 my-6 w-full'>
+        <div className='w-full overflow-y-auto ml-[64px] mr-3 mt-16 md:ml-[290px] md:mt-20 mb-8'>
           {children}
         </div>
       </div>

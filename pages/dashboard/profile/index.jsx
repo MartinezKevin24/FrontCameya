@@ -2,26 +2,77 @@ import React from 'react'
 import { Formik, Form, Field } from 'formik'
 import { useSelector } from 'react-redux';
 import FormField from 'components/forms/FormField'
+import axios from 'axios';
 import Button from "components/Button";
 import DateField from 'components/forms/DateField';
+import ApiRoutes from 'constants/routes/api';
+import { useDispatch } from "react-redux";
+import { insertData } from "store/User/reducer"; 
+import { useRouter } from 'next/router';
+import * as Yup from 'yup'
+import PageRoutes from 'constants/routes/pages';
+import useFormats from 'hooks/formats/useFormats';
+
+const validationSchema = Yup.object({
+  "name": Yup.string()
+    .required("Este campo es obligatorio."),
+  "last_name": Yup.string()
+    .required("Este campo es obligatorio."),
+  "dni_type": Yup.string()
+    .required("Este campo es obligatorio."),
+  "dni": Yup.string()
+    .required("Este campo es obligatorio."),
+  "birth_date": Yup.date()
+    .required("Este campo es obligatorio."),
+  "email": Yup.string()
+    .email("Por favor, ingrese un email valido.")
+    .required("Este campo es obligatorio."),
+  "address": Yup.string()
+    .required("Este campo es obligatorio."),
+  "phone": Yup.string()
+    .required("Este campo es obligatorio."),
+})
 
 export default function Profile() {
 
-  const user = useSelector(state => state.login.value.data)
+  const user = useSelector(state => state.login?.value?.data)
+  const dispatch = useDispatch();
+  const { push } = useRouter()
+  const { changeFormatDate } = useFormats()
 
-  const initalValues = {
+  const initalValues = user ?{
     ...user,
     birth_date: new Date(user.birth_date.replace(/-/g, '\/'))
+  } : {
+    "name": "",
+    "last_name": "",
+    "dni_type": "",
+    "dni": "",
+    "birth_date": new Date(),
+    "email": "",
+    "address": "",
+    "phone": ""
   }
 
   const onSubmit = (values) => {
-    console.log(values)
+
+    const form_values = {
+      ...values,
+      birth_date: changeFormatDate(values?.birth_date)
+    }
+
+    axios.put(ApiRoutes.profile.update, form_values, { headers: {'Content-Type': 'application/json'} })
+      .then(async(response) => {
+        await dispatch(insertData({data: form_values, token: user.token}))
+        push(PageRoutes.dashboard.index)
+      })
+      .catch((err) => console.log(err))
   }
 
   return (
     <div className='w-full'>
       <div className='w-full max-w-3xl py-14 px-10 bg-white rounded-md'>
-        <Formik initialValues={initalValues} onSubmit={onSubmit}>
+        <Formik initialValues={initalValues} onSubmit={onSubmit} validationSchema={validationSchema}>
           {
             ({values}) => (
               <Form>
@@ -41,7 +92,7 @@ export default function Profile() {
                       id="last_name"
                       placeholder="Apellidos"/>
                   </div>
-                  <div className='grid grid-cols-2 gap-4 w-full'>
+                  <div className='grid md:grid-cols-2 gap-4 w-full'>
                     <div>
                       <label htmlFor="dni_type" className='text-gray-darkest text-sm'>Tipo de identificación</label>
                       <Field as="select" name="dni_type" id="dni_type" disabled={true} 
