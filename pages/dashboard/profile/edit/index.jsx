@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import * as Yup from 'yup'
 import PageRoutes from 'constants/routes/pages';
 import useFormats from 'hooks/formats/useFormats';
+import WhiteBox from 'components/Main/WhiteBox';
 
 const validationSchema = Yup.object({
   "name": Yup.string()
@@ -71,7 +72,7 @@ export default function Edit() {
 
   return (
     <div className='w-full'>
-      <div className='w-full max-w-3xl py-14 px-10 bg-white rounded-md'>
+      <WhiteBox>
         <Formik initialValues={initalValues} onSubmit={onSubmit} validationSchema={validationSchema}>
           {
             ({values}) => (
@@ -152,7 +153,7 @@ export default function Edit() {
             )
           }
         </Formik>
-      </div>
+      </WhiteBox>
     </div>
   )
 }

@@ -14,7 +14,7 @@ import { AiFillHome, AiTwotoneMail, AiFillSetting } from 'react-icons/ai'
 
 export default function SideNavBar() {
 
-  const data = useSelector(state => state.login.value.data)
+  const user = useSelector(state => state.login.value.data)
   const dispatch = useDispatch()
 
   const routes = [
@@ -44,12 +44,19 @@ export default function SideNavBar() {
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center justify-center md:justify-normal gap-3 bg-gray-extralight border-[1px] rounded-xl md:py-2 py-1 md:px-3 md:mx-3 mx-1'>
               <Link href={PageRoutes.dashboard.profile} passHref>
-                <div className='bg-gray w-11/12 md:w-12 py-1 md:h-12 cursor-pointer flex justify-center items-center rounded-full'>
-                  <Image src={perfil} alt="imagen de perfil" width={30} height={30}/>
+                <div className={classNames(['bg-gray w-11/12 md:w-12 py-1 md:h-12 cursor-pointer relative flex justify-center overflow-hidden items-center rounded-full',
+                  {"h-10 w-10 md:w-12 md:h-12" : user?.profile_picture}])}>
+                  {
+                    user?.profile_picture
+                    ?
+                    <img src={user.profile_picture} alt='profile picture' className='absolute h-full w-full object-cover'/>
+                    :
+                    <Image src={perfil} alt="imagen de perfil" width={30} height={30}/>
+                  }
                 </div>
               </Link>
               <div className='leading-5 font-bold text-gray-darkest text-sm md:block hidden'>
-                <p>{data?.name} {data?.last_name}</p>
+                <p>{user?.name} {user?.last_name}</p>
                 <Link href={PageRoutes.dashboard.profile_edit} passHref>
                   <p className='text-gray-light font-normal flex flex-row gap-1 cursor-pointer hover:text-gray'>
                     <span className='text-xs flex items-center mb-[3px]'>

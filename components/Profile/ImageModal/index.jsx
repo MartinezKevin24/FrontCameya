@@ -50,7 +50,7 @@ export default function ImageModal({setOpen}) {
   return (
     <div ref={refFather} className='fixed top-0 left-0 z-50 w-full h-full flex justify-center items-center bg-container'>
       <div ref={refModal} className='w-11/12 md:w-4/6 bg-white py-6 px-2 md:px-4 relative'>
-        <div className='bg-purple hover:bg-purple-dark focus:bg-purple-darkest w-7 h-7 flex justify-center items-center text-white 
+        <div className='bg-purple hover:bg-purple-dark focus:bg-purple-darkest w-8 h-7 flex justify-center items-center text-white 
           absolute top-0 right-0 cursor-pointer text-2xl' onClick={()=>setOpen(false)}>
           x
         </div>
