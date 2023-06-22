@@ -7,7 +7,9 @@ import Button from 'components/Button'
 import { useRecoilState } from 'recoil'
 import openPostState from 'atoms/services/openPostState'
 import FormError from 'components/forms/FormError';
+import ApiRoutes from 'constants/routes/api';
 import * as Yup from 'yup'
+import axios from 'axios';
 
 const validationSchema = Yup.object().shape({
   "service_title": Yup.string()
@@ -19,6 +21,9 @@ const validationSchema = Yup.object().shape({
   "total_price": Yup.number()
     .min(1, 'El valor debe ser mayor a 1')
     .required("Este campo es obligatorio."),
+  "categories": Yup.array()
+    .min(1, 'Debes seleccionar al menos una categoría')
+    .of(Yup.string())
 })
 
 export default function ServiceForm() {
@@ -30,14 +35,24 @@ export default function ServiceForm() {
     service_title: '',
     service_description: '',
     categories: [],
-    client_dni: '',
-    date_programed: new Date(),
+    client_dni: user.dni,
+    date_programmed: new Date(),
     address: '',
-    total_price: 0
+    total_price: 0,
+    service_status: 0
   }
 
-  const onSubmit = (values) => {
-    console.log(values)
+  const onSubmit = (values, {resetForm, setSubmitting}) => {
+    axios.post(ApiRoutes.services.create, values)
+      .then(response => {
+        resetForm()
+        setSubmitting(false)
+        setOpen(false)
+      })
+      .catch(err => {
+        console.log(err)
+        setSubmitting(false)
+      })
   }
 
   return (
@@ -47,7 +62,7 @@ export default function ServiceForm() {
         onSubmit={onSubmit}
         validationSchema={validationSchema}>
         {
-          ({values})=>(
+          ({values, isSubmitting})=>(
             <Form className='flex flex-col gap-2'>
               <div className='flex flex-row w-full gap-4'>
                 <div className='rounded-full overflow-hidden h-12 w-[54px] block'>
@@ -60,7 +75,7 @@ export default function ServiceForm() {
                     placeholder='Identifica tu servicio'
                     type='text' 
                     onClick={()=>setOpen(true)}
-                    className={classNames(["w-full outline-none px-2 py-1", { "border-b-[1px] mb-3" : open }])}
+                    className={classNames(["w-full outline-none px-2 py-1 text-gray-darkest", { "border-b-[1px] mb-3" : open }])}
                     />
                   {
                     open &&
@@ -69,23 +84,25 @@ export default function ServiceForm() {
                       <Field 
                         name='address'
                         id='address'
-                        type='text'
                         placeholder='Dirección' 
-                        className={classNames(["w-full outline-none px-2 py-1 border-b-[1px]"])}/>
+                        className={classNames(["w-full outline-none px-2 py-1 border-b-[1px] text-gray-darkest"])}/>
                       <FormError name={"address"}/>
                       <Field 
                         name='service_description'
                         id='service_description'
                         as='textarea'
                         placeholder='Descripción' 
-                        className={classNames(["w-full outline-none px-2 py-1 border-b-[1px] resize-none h-20"])}/>
+                        className={classNames(["w-full outline-none px-2 py-1 border-b-[1px] resize-none h-20 text-gray-darkest"])}/>
                       <FormError name={"service_description"}/>
-                      <Field 
-                        name='total_price'
-                        id='total_price'
-                        type='number'
-                        placeholder='Precio ofrecido' 
-                        className={classNames(["w-full outline-none px-2 py-1 border-b-[1px]"])}/>
+                      <div className='flex flex-row gap-2 items-center'>
+                        <p className='font-bold text-gray-darkest ml-1'>COP$</p>
+                        <Field 
+                          name='total_price'
+                          id='total_price'
+                          type='number'
+                          placeholder='Precio ofrecido' 
+                          className={classNames(["w-full outline-none px-2 py-1 border-b-[1px] text-gray-darkest"])}/>
+                      </div>
                       <FormError name={"total_price"}/>
                       <CategoryField name="categories"/>
                     </div>
@@ -96,8 +113,9 @@ export default function ServiceForm() {
                 open &&
                 <Button
                   type="submit"
+                  disabled={isSubmitting}
                   >
-                  Enviar
+                  {isSubmitting ? "loading..." : "Enviar"}
                 </Button>
               }
             </Form>

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import {AiFillStar} from 'react-icons/ai'
 import useFormats from 'hooks/formats/useFormats'
 
-export default function Cards({service, iterator}) {
+export default function Cards({service}) {
 
 	const { changeFormatDate } = useFormats()
 
@@ -16,7 +16,7 @@ export default function Cards({service, iterator}) {
 					</div>
 					<div className='font-semibold text-sm flex flex-col'>
 						<p>{service.User.name} {service.User.last_name}</p>	
-						<p className='font-light text-xs'>{changeFormatDate(service.date_assignment)}</p>
+						<p className='font-light text-xs'>{changeFormatDate(service.date_programmed)}</p>
 					</div>
 				</div>
 				<div className='flex flex-row items-center justify-center'>
@@ -25,7 +25,7 @@ export default function Cards({service, iterator}) {
 			</div>
 			<div className='px-2 flex flex-col gap-4'>
 				<div className='flex gap-1 flex-col'>
-					<h1 className='font-bold text-2xl text-gray-darkest'>Titulo quemado {iterator + 1}</h1>
+					<h1 className='font-bold text-2xl text-gray-darkest'>{service.service_title}</h1>
 					<p className='text-gray-dark'>{service.service_description}</p>
 				</div>
 				<p className='text-gray-darkest font-semibold flex items-center gap-2'>Precio inicial: <span className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-lime-600'>$ {service.total_price}</span></p>
