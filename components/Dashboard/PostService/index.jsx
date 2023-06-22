@@ -1,7 +1,7 @@
 import React from 'react'
 import ServiceForm from 'components/ServiceForm'
 
-export default function PostService() {
+export default function PostService({ref}) {
   return (
     <div className='w-full rounded-xl md:min-w-[300px] flex flex-col gap-3 md:max-w-[650px] bg-white'>
       <div className='pt-4 border-b-2 px-6 pb-3 text-sm font-bold text-gray-darkest'>
