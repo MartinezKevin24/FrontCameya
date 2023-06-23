@@ -19,7 +19,7 @@ export default function SideNavBar() {
 
   const routes = [
     {name: 'Inicio', path: PageRoutes.dashboard.index, icon: <AiFillHome/>},
-    {name: 'Mis Servicios', path: '/dashboard/mis-servicios', icon: <AiTwotoneMail/>},
+    {name: 'Mis Servicios', path: PageRoutes.dashboard.services, icon: <AiTwotoneMail/>},
     {name: 'Ajustes', path: '/dashboard/ajustes', icon: <AiFillSetting/>}
   ];
 

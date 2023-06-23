@@ -31,17 +31,17 @@ export default function Dashboard() {
 
     const getServices = () => {
       axios.get(ApiRoutes.services.all, { cancelToken: cancelTokenSource.token })
-      .then(response => {
-        let array = response.data.message;
-        array.sort((a, b) => {
-          const today = new Date();
-          const diferenciaA = Math.abs(new Date(a.date_programmed) - today)
-          const diferenciaB = Math.abs(new Date(b.date_programmed) - today)
-          return diferenciaA - diferenciaB
+        .then(response => {
+          let array = response.data.message;
+          array.sort((a, b) => {
+            const today = new Date();
+            const diferenciaA = Math.abs(new Date(a.date_programmed) - today)
+            const diferenciaB = Math.abs(new Date(b.date_programmed) - today)
+            return diferenciaA - diferenciaB
+          })
+          setServices(array)
         })
-        setServices(array)
-      })
-      .catch(error => console.log(error))
+        .catch(error => console.log(error))
     }
 
     getServices()
@@ -54,15 +54,15 @@ export default function Dashboard() {
 
   return (
     <div className='z-0 sticky overflow-y-auto flex flex-col gap-6 whidth' ref={refFather}>
-      <div ref={refService} className='flex md:min-w-[300px] flex-col w-full md:max-w-[650px]'>
+      <div ref={refService} className='flex md:min-w-[300px] flex-col w-full md:max-w-[1000px]'>
         <PostService ref={refService}/>
       </div>
       {
         services.length > 0 
         ?
-        services.map((service, i) => <Cards key={i} iterator={i} service={service}/>)
+        services.map((service, i) => <Cards key={i} service={service}/>)
         :
-        <div className='absolute'>
+        <div className='sticky'>
           Loading...
         </div>
       }

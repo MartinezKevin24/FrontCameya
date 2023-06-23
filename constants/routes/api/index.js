@@ -9,7 +9,11 @@ const ApiRoutes = {
   },
   services: {
     all: "https://apicameya.semard.co/api/service",
-    create: "https://apicameya.semard.co/api/service/create"
+    create: "https://apicameya.semard.co/api/service/create",
+    user: "https://apicameya.semard.co/api/service/suser",
+    detail: "https://apicameya.semard.co/api/service/",
+    update: "https://apicameya.semard.co/api/service/update",
+    delete: "https://apicameya.semard.co/api/service/delete",
   }
 }
 

@@ -32,15 +32,15 @@ export default function CategoryField({name}) {
           <option value="cuidado de mascotas">Cuidado de mascotas</option>
           <option value="llantería">Llantería</option>
         </select>
-        <div className='flex flex-wrap gap-2 p-3 mb-1 rounded-lg bg-gray-lightest w-full min-h-[60px]'>
+        <div className='flex flex-wrap gap-2 p-3 mb-1 rounded-lg bg-gray-lightestplus w-full min-h-[60px]'>
           {
             field.value.map((category, i) => (
-              <div key={i} className='px-2 py-1 rounded-lg flex flex-row items-center gap-2 bg-sky-600'>
-                <p className='text-gray-lightest'>{category}</p>
+              <div key={i} className='px-2 py-1 rounded-lg flex flex-row items-center gap-2 bg-blue-200'>
+                <p className='text-gray-darkest font-semibold'>{category}</p>
                 <p 
                   onClick={()=>removeOption(category)}
                   className='py-[2x] flex items-center justify-center px-[6px] rounded-full hover:bg-gray 
-                  hover:text-gray-dark cursor-pointer text-gray-lightest font-bold text-xs'>
+                  hover:text-gray-dark cursor-pointer text-gray-darkest font-bold text-xs'>
                     x
                 </p>
               </div>
