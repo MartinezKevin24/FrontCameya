@@ -1,11 +1,16 @@
 const PageRoutes = {
   dashboard: {
     index: "/dashboard",
-    profile: "/dashboard/profile",
-    profile_edit: "/dashboard/profile/edit",
-    services: "/dashboard/mis-servicios",
-    servicePage: "/dashboard/mis-servicios/[slug]",
-    serviceEdit: "/dashboard/mis-servicios/edit/[slug]"
+    profile: {
+      index: "/dashboard/profile",
+      edit: "/dashboard/profile/edit",
+    },
+    services: {
+      index: "/dashboard/mis-servicios",
+      page: "/dashboard/mis-servicios/[slug]",
+      edit: "/dashboard/mis-servicios/edit/[slug]",
+    },
+    ajustes: "/dashboard/ajustes",
   }
 }
 

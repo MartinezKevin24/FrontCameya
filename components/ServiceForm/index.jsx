@@ -10,6 +10,8 @@ import FormError from 'components/forms/FormError';
 import ApiRoutes from 'constants/routes/api';
 import * as Yup from 'yup'
 import axios from 'axios';
+import servicesState from 'atoms/services/servicesState'
+import pageState from 'atoms/services/pageState'
 
 const validationSchema = Yup.object().shape({
   "service_title": Yup.string()
@@ -26,10 +28,12 @@ const validationSchema = Yup.object().shape({
     .of(Yup.string())
 })
 
-export default function ServiceForm() {
+export default function ServiceForm({}) {
 
   const user = useSelector(state => state.login.value.data)
   const [open, setOpen] = useRecoilState(openPostState);
+  const [page, setPage] = useRecoilState(pageState);
+  const [services, setServices] = useRecoilState(servicesState);
 
   const initialValues = {
     service_title: '',
@@ -45,6 +49,8 @@ export default function ServiceForm() {
   const onSubmit = (values, {resetForm, setSubmitting}) => {
     axios.post(ApiRoutes.services.create, values)
       .then(response => {
+        setServices([])
+        setPage(1)
         resetForm()
         setSubmitting(false)
         setOpen(false)

@@ -49,7 +49,7 @@ export default function EditService() {
     axios.put(ApiRoutes.services.update, values)
       .then(response => {
         resetForm()
-        push(PageRoutes.dashboard.services)
+        push(PageRoutes.dashboard.services.index)
         setSubmitting(false)
       })
       .catch(err => {
@@ -60,7 +60,7 @@ export default function EditService() {
 
   useEffect(()=>{
     if(!edit)
-      push(PageRoutes.dashboard.services)
+      push(PageRoutes.dashboard.services.index)
   }, [])
 
   return (

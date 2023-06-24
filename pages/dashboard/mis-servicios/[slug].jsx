@@ -28,6 +28,8 @@ export default function ServicePage() {
 
   }, [query])
 
+  console.log(data)
+
 	const postulantes = [
 		{
 			name: "John",

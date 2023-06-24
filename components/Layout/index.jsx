@@ -9,11 +9,12 @@ export default function Layout({children}) {
 
   if([
       PageRoutes.dashboard.index,
-      PageRoutes.dashboard.profile,
-      PageRoutes.dashboard.profile_edit,
-      PageRoutes.dashboard.services,
-      PageRoutes.dashboard.servicePage,
-      PageRoutes.dashboard.serviceEdit
+      PageRoutes.dashboard.profile.index,
+      PageRoutes.dashboard.profile.edit,
+      PageRoutes.dashboard.services.index,
+      PageRoutes.dashboard.services.page,
+      PageRoutes.dashboard.services.edit,
+      PageRoutes.dashboard.ajustes,
     ].includes(pathname))
     return (
       <LayoutDashboard>

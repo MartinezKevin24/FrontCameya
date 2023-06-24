@@ -3,13 +3,17 @@ import axios from 'axios'
 import ApiRoutes from 'constants/routes/api'
 import Cards from 'components/Dashboard/Cards'
 import PostService from 'components/Dashboard/PostService'
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilState } from 'recoil'
 import openPostState from 'atoms/services/openPostState'
+import servicesState from 'atoms/services/servicesState'
+import pageState from 'atoms/services/pageState'
 
 export default function Dashboard() {
 
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useRecoilState(servicesState);
   const setOpen = useSetRecoilState(openPostState);
+  const [page, setPage] = useRecoilState  (pageState);
+  const [lastPage, setLastPage] = useState(false)
   const refService = useRef()
   const refFather = useRef()
 
@@ -30,16 +34,26 @@ export default function Dashboard() {
     const cancelTokenSource = axios.CancelToken.source();
 
     const getServices = () => {
-      axios.get(ApiRoutes.services.all, { cancelToken: cancelTokenSource.token })
+      axios.get(`${ApiRoutes.services.all}/${page}`, { cancelToken: cancelTokenSource.token })
         .then(response => {
           let array = response.data.message;
-          array.sort((a, b) => {
-            const today = new Date();
-            const diferenciaA = Math.abs(new Date(a.date_programmed) - today)
-            const diferenciaB = Math.abs(new Date(b.date_programmed) - today)
-            return diferenciaA - diferenciaB
-          })
-          setServices(array)
+          if(array.length > 0){
+            array.sort((a, b) => {
+              const today = new Date();
+              const diferenciaA = Math.abs(new Date(a.date_programmed) - today)
+              const diferenciaB = Math.abs(new Date(b.date_programmed) - today)
+              return diferenciaA - diferenciaB
+            })
+          }
+          
+          if(array.length < 10)
+            setLastPage(true)
+          else
+            setLastPage(false)
+
+          const data = services.concat(array)
+          setServices(data)
+
         })
         .catch(error => console.log(error))
     }
@@ -50,7 +64,7 @@ export default function Dashboard() {
       cancelTokenSource.cancel();
     }
 
-  }, [])
+  }, [page])
 
   return (
     <div className='z-0 sticky overflow-y-auto flex flex-col gap-6 whidth' ref={refFather}>
@@ -60,7 +74,17 @@ export default function Dashboard() {
       {
         services.length > 0 
         ?
-        services.map((service, i) => <Cards key={i} service={service}/>)
+        <div className='flex flex-col gap-6'>
+          {services.map((service, i) => <Cards key={i} service={service}/>)}
+          {
+            !lastPage &&
+            <div 
+              className='w-full cursor-pointer bg-white hover:bg-slate-300 text-gray-darkest flex justify-center rounded-full py-2'
+              onClick={()=>setPage(page + 1)}>
+              <p className='font-bold'>Ver más </p>
+            </div>
+          }
+        </div>
         :
         <div className='sticky'>
           Loading...

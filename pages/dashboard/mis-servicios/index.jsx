@@ -38,7 +38,7 @@ export default function Servicios() {
       {
         services.length > 0
         ?
-        services.map((service, i) => <Cards key={i} service={service}/>)
+        services.map((service, i) => <Cards key={i} service={service} setServices={setServices} user={user.dni}/>)
         :
         <p>Loading...</p>
       }

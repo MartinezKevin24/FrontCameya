@@ -42,14 +42,14 @@ export default function CardApplication({user}) {
         </div>
       </div>
       <div className='flex flex-col md:flex-row md:gap-4 gap-3'>
-        <Button
+        {/* <Button
           className='bg-red hover:bg-red-600 focus:bg-red-500'
           onClick={()=>handleRemove()}>
           Eliminar
-        </Button>
+        </Button> */}
         <Button
           className='bg-emerald-600 hover:bg-emerald-500 focus:bg-emerald-400'
-          onClick={()=>handleRemove()}>
+          onClick={()=>handleAccept()}>
           Aceptar
         </Button>
       </div>

@@ -9,8 +9,10 @@ import PageRoutes from 'constants/routes/pages'
 import Link from 'next/link'
 import { useRecoilState } from 'recoil';
 import editService from 'atoms/services/editService';
+import axios from 'axios'
+import ApiRoutes from 'constants/routes/api'
 
-export default function Cards({service}) {
+export default function Cards({service, setServices, user}) {
 
 	const { changeFormatDate } = useFormats()
 	const { pathname, push } = useRouter()
@@ -31,6 +33,27 @@ export default function Cards({service}) {
 		push(`/dashboard/mis-servicios/edit/${service.id}`)
 	}
 
+	const handleRemove = () => {
+		axios.delete(ApiRoutes.services.delete, { data: { id: `${service.id}` } })
+			.then((response) =>{
+				axios.post(ApiRoutes.services.user, { dni: user })
+        	.then(response => {
+						let array = response.data.message;
+						if(array.length > 0){
+							array.sort((a, b) => {
+								const today = new Date();
+								const diferenciaA = Math.abs(new Date(a.date_programmed) - today)
+								const diferenciaB = Math.abs(new Date(b.date_programmed) - today)
+								return diferenciaA - diferenciaB
+							})
+						}
+						setServices(array)
+					})
+					.catch(error => console.log(error))
+			})
+			.catch((error) => console.log(error))
+	}
+
 	return (
 		<div className='bg-white py-6 px-6 w-full rounded-xl md:min-w-[450px] md:max-w-[1000px] flex flex-col gap-4'>
 			<div className='flex flex-row items-center justify-between'>
@@ -48,7 +71,7 @@ export default function Cards({service}) {
 				</div>
 				<div className='flex flex-row items-center justify-center'>
 					{
-						[PageRoutes.dashboard.services].includes(pathname)
+						[PageRoutes.dashboard.services.index].includes(pathname)
 						?
 						<div className='flex flex-row gap-3'>
 							<p className='text-2xl text-gray-dark hover:text-red cursor-pointer' onClick={()=>handleRemove()}>
@@ -65,7 +88,7 @@ export default function Cards({service}) {
 			</div>
 			<div className='px-2 flex flex-col gap-4'>
 				<div className='flex gap-1 flex-col'>
-					<Link href={`${PageRoutes.dashboard.services}/${service.id}`} passHref>
+					<Link href={`${PageRoutes.dashboard.services.index}/${service.id}`} passHref>
 						<h1 className='font-bold text-2xl text-gray-darkest cursor-pointer hover:text-purple'>{service.service_title}</h1>
 					</Link>
 					<TruncateText text={service.service_description} maxLength={300}/>

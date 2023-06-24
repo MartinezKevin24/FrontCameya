@@ -44,7 +44,7 @@ export default function Profile() {
               <p className='font-semibold text-gray-darkest text-4xl flex 
                 flex-row gap-2 items-center'>
                   {user?.name} {user?.last_name} 
-                  <Link href={PageRoutes.dashboard.profile_edit}><span className='text-2xl text-gray-400 cursor-pointer'><BiEdit/></span></Link>
+                  <Link href={PageRoutes.dashboard.profile.edit}><span className='text-2xl text-gray-400 cursor-pointer'><BiEdit/></span></Link>
               </p>
               <p className='font-semibold text-gray'>{user?.email}</p>
             </div>

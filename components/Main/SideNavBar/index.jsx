@@ -18,15 +18,26 @@ export default function SideNavBar() {
   const dispatch = useDispatch()
 
   const routes = [
-    {name: 'Inicio', path: PageRoutes.dashboard.index, icon: <AiFillHome/>},
-    {name: 'Mis Servicios', path: PageRoutes.dashboard.services, icon: <AiTwotoneMail/>},
-    {name: 'Ajustes', path: '/dashboard/ajustes', icon: <AiFillSetting/>}
+    {name: 'Inicio', path: [PageRoutes.dashboard.index], icon: <AiFillHome/>},
+    {name: 'Mis Servicios', 
+      path: [
+        PageRoutes.dashboard.services.index,
+        PageRoutes.dashboard.services.edit
+      ], 
+      icon: <AiTwotoneMail/>},
+    {name: 'Ajustes', 
+      path: [
+        PageRoutes.dashboard.ajustes,
+        PageRoutes.dashboard.profile.index,
+        PageRoutes.dashboard.profile.edit
+      ], 
+      icon: <AiFillSetting/>}
   ];
 
   const { pathname, push } = useRouter()
 
   const pathActive = (path) => {
-    if (pathname === path)
+    if (path.includes(pathname)) 
       return true
     else
       return false
@@ -43,7 +54,7 @@ export default function SideNavBar() {
         <div className='flex flex-col justify-between height pb-4'>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center justify-center md:justify-normal gap-3 bg-gray-extralight border-[1px] rounded-xl md:py-2 py-1 md:px-3 md:mx-3 mx-1'>
-              <Link href={PageRoutes.dashboard.profile} passHref>
+              <Link href={PageRoutes.dashboard.profile.index} passHref>
                 <div className={classNames(['bg-gray w-11/12 md:w-12 py-1 md:h-12 cursor-pointer relative flex justify-center overflow-hidden items-center rounded-full',
                   {"h-10 w-10 md:w-12 md:h-12" : user?.profile_picture}])}>
                   {
@@ -57,7 +68,7 @@ export default function SideNavBar() {
               </Link>
               <div className='leading-5 font-bold text-gray-darkest text-sm md:block hidden'>
                 <p>{user?.name} {user?.last_name}</p>
-                <Link href={PageRoutes.dashboard.profile_edit} passHref>
+                <Link href={PageRoutes.dashboard.profile.edit} passHref>
                   <p className='text-gray-light font-normal flex flex-row gap-1 cursor-pointer hover:text-gray'>
                     <span className='text-xs flex items-center mb-[3px]'>
                       <FaPencilAlt/>
@@ -70,7 +81,7 @@ export default function SideNavBar() {
             <ul className='my-4 flex flex-col'>
               {
                 routes.map((route, i) => ( 
-                  <Link href={route.path} passHref key={i}>
+                  <Link href={route.path[0]} passHref key={i}>
                     <li key={i} className={classNames(['px-4 py-3 relative cursor-pointer hover:text-blue-pale font-bold flex items-center gap-x-3', 
                       {"text-blue-pale bg-white md:w-[275px] md:shadow-menu rounded-e-xl md:mb-2" : pathActive(route.path)}, 
                       { "text-gray-darkest": !pathActive(route.path)}])}>
