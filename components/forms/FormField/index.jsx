@@ -3,12 +3,16 @@ import {useField} from 'formik'
 import FormError from "components/forms/FormError"
 import classNames from 'classnames';
 
-export default function FormField({name, type, placeholder, disabled = false,...props}) {
+export default function FormField({name, type, placeholder, disabled = false, label,...props}) {
 
   const [field, meta] = useField(name);
 
   return (
     <div>
+      {
+        label &&
+        <label htmlFor={name} className='text-gray-darkest font-semibold'>{label}</label>
+      }
       <input 
         type={type} 
         id={name}
