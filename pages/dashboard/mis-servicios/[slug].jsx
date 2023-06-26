@@ -5,12 +5,17 @@ import ApiRoutes from 'constants/routes/api'
 import Image from 'next/image'
 import useFormats from 'hooks/formats/useFormats'
 import CardApplication from '@/components/Dashboard/CardApplication'
+import Button from 'components/Button'
+import { useSelector } from 'react-redux';
+import { toast } from "react-toastify";
+import PageRoutes from 'constants/routes/pages'
 
 export default function ServicePage() {
 
-  const { query } = useRouter()
-  const [data, setData] = useState(null)
+  const { query, push } = useRouter()
+  const [ data, setData ] = useState(null)
 	const { changeFormatDate } = useFormats()
+	const user = useSelector(state => state.login.value.data)
 
   useEffect(() => {
 
@@ -30,28 +35,27 @@ export default function ServicePage() {
 
   console.log(data)
 
-	const postulantes = [
-		{
-			name: "John",
-			last_name: "Doe",
-			email: "john@doe.com",
-			phone: "3214567823",
-			profile_picture: "https://res.cloudinary.com/aarnedoe/image/upload/v1686880006/profile_pictures/123456789.jpg",
-			service_type: "carpintero",
-			score: 4.8,
-			service_detail: 'et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed'
-		},
-		{
-			name: "John 1",
-			last_name: "Doe 1",
-			email: "john1@doe.com",
-			phone: "3214567823",
-			profile_picture: "https://res.cloudinary.com/aarnedoe/image/upload/v1686880006/profile_pictures/123456789.jpg",
-			service_type: "Pintor",
-			score: 4.8,
-			service_detail: 'et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed'
-		}
-	]
+	const findPostulation = () =>{
+		const exist = data?.WorkerPostulations.find(worker => worker.worker_dni === user.dni )
+		if(exist)
+			return true
+		else
+			return false
+	}
+
+	const handlePostulation = () => {
+		axios.post(ApiRoutes.services.postulation, { service_id:data.id, worker_dni: user.dni })
+			.then((reponse)=>{
+				toast.success("Postulación exitosa!", {
+					position: toast.POSITION.TOP_RIGHT
+				});
+				push(PageRoutes.dashboard.index)
+			})
+			.catch(()=>{
+				console.log(error)
+			})
+
+	}
 
 	if(!data)
 		return (<div>Loading...</div>)
@@ -97,16 +101,35 @@ export default function ServicePage() {
 							</div>
 						</div>
 					</div>
+					<div className='mx-2'>
+						{
+							user?.is_worker 
+							?
+							<Button
+								onClick={handlePostulation}
+								disabled={findPostulation()}
+								color={'green'}>
+								{
+									findPostulation() 
+									?
+									"Ya estás postulado"
+									:
+									"Postularme"
+								}
+							</Button>
+							:null
+						}
+					</div>
 				</div>
 				{
-					data.service_status === "Not Assigned" &&
+					data.service_status === "Not Assigned" && !user.is_worker && data.WorkerPostulations.length > 0 &&
 					<div className='px-2 flex flex-col gap-4	'>
 						<div className='border-b-2 pb-2'>
 							<h1 className='font-bold text-gray-darkest text-2xl'>Postulantes</h1>
 						</div>
 						<div className='flex flex-col gap-3'>
 							{
-								postulantes.map((application, i)=><CardApplication key={i} user={application}/>)
+								data?.WorkerPostulations.map((application, i)=><CardApplication key={i} service={data} user={application}/>)
 							}
 						</div>
 					</div>

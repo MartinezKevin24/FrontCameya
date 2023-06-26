@@ -111,7 +111,7 @@ export default function ServiceForm({}) {
                           className={classNames(["w-full outline-none px-2 py-1 border-b-[1px] text-gray-darkest"])}/>
                       </div>
                       <FormError name={"total_price"}/>
-                      {/* <CategoryField name="categories"/> */}
+                      <CategoryField name="categories"/>
                     </div>
                   }
                 </div>

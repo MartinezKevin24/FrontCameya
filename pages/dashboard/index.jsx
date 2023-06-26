@@ -12,14 +12,14 @@ import { useSelector } from 'react-redux';
 export default function Dashboard() {
 
   const [services, setServices] = useRecoilState(servicesState);
-  const [local, setLocal] = useState([])
-  const setOpen = useSetRecoilState(openPostState);
   const [page, setPage] = useRecoilState(pageState);
   const [lastPage, setLastPage] = useState(false)
-  const [loading, setLoading] = useState(false)
   const user = useSelector(state => state.login.value.data)
   const refService = useRef()
+  const setOpen = useSetRecoilState(openPostState);
   const refFather = useRef()
+
+  console.log(user)
 
   const handleClickOutside = (e) => {
     if(refService.current && !refService.current.contains(e.target) && refFather.current.contains(e.target))
@@ -34,16 +34,17 @@ export default function Dashboard() {
   }, [refService.current]);
 
   useEffect(()=>{
+    setPage(1)
+    setServices([])
+  }, [])
+
+  useEffect(()=>{
 
     const cancelTokenSource = axios.CancelToken.source();
 
     const getServices = () => {
-      setLoading(true)
-      setServices([])
-      for (let i = 0; i < page.length; i++) {
-        axios.get(`${ApiRoutes.services.all}/${page[i]}`, { cancelToken: cancelTokenSource.token })
+      axios.get(`${ApiRoutes.services.all}/${page}`, { cancelToken: cancelTokenSource.token })
         .then(response => {
-          console.log(response)
           let array = response.data.message;
           if(array.length > 0){
             array.sort((a, b) => {
@@ -58,20 +59,13 @@ export default function Dashboard() {
             setLastPage(true)
           else
             setLastPage(false)
-
-
-          const data = local.concat(array)
-          console.log(serv, data)
-          // setServices(data)
-
-          setLoading(false)
+            
+          setServices((prev) => prev.concat(array))
 
         })
         .catch(error => {
-          setLoading(false)
           console.log(error)
-        })        
-      }
+        }) 
     }
 
     getServices()
@@ -91,18 +85,20 @@ export default function Dashboard() {
         </div>
       }
       {
-        services.length > 0 ?
+        services.length !== 0 
+        ?
         <div className='flex flex-col gap-6'>
-          {services.map((service, i) => <Cards key={i} service={service}/>)}
+          {services.map((service, i) => <Cards key={i} service={service} user={user}/>)}
           {
             !lastPage &&
             <div 
               className='w-full cursor-pointer bg-white hover:bg-slate-300 text-gray-darkest flex justify-center rounded-full py-2'
-              onClick={()=>setPage(page.concat(page.length + 1))}>
+              onClick={()=>setPage((prev)=>prev+1)}>
               <p className='font-bold'>Ver más </p>
             </div>
           }
-        </div>:
+        </div>
+        :
         <div className='sticky'>
           Ooops, No tenemos servicios disponibles actualmente...
         </div>

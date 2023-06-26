@@ -13,7 +13,14 @@ export default function Servicios() {
   useEffect(() => {
     const cancelTokenSource = axios.CancelToken.source();
 
-    axios.post(ApiRoutes.services.user, {dni: user.dni}, { cancelToken: cancelTokenSource.token })
+    let url;
+
+    if(user.is_worker)
+      url = ApiRoutes.services.worker
+    else
+      url = ApiRoutes.services.user
+
+    axios.post(url, {dni: user.dni}, { cancelToken: cancelTokenSource.token })
         .then(response => {
           let array = response.data.message;
           array.sort((a, b) => {
@@ -63,7 +70,7 @@ export default function Servicios() {
         <h1 className='text-3xl font-bold text-gray-darkest'>Mis Servicios</h1>
       </div>
       {
-        services.map((service, i) => <Cards key={i} service={service} setServices={setServices} user={user.dni}/>)
+        services.map((service, i) => <Cards key={i} service={service} setServices={setServices} user={user}/>)
       }
 
       <style jsx>{`

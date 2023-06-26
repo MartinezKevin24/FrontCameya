@@ -1,6 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useField } from 'formik'
 import FormError from 'components/forms/FormError';
+import axios from 'axios';
+import ApiRoutes from 'constants/routes/api';
 
 export default function CategoryField({name}) {
 
@@ -15,6 +17,24 @@ export default function CategoryField({name}) {
     const updatedArray = field.value.filter(item => item !== value);
     helpers.setValue(updatedArray);
   }
+
+  useEffect(() => {
+
+    const cancelTokenSource = axios.CancelToken.source()
+
+    axios.get(ApiRoutes.categories.index, {cancelToken: cancelTokenSource.token})
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    return () =>{
+      cancelTokenSource.cancel();
+    }
+
+  }, [])
 
   return (
     <div>

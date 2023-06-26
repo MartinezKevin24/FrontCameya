@@ -18,6 +18,14 @@ export default function Cards({service, setServices, user}) {
 	const { pathname, push } = useRouter()
 	const [edit, setEdit] = useRecoilState(editService)
 
+	const findPostulation = () =>{
+		const exist = service?.WorkerPostulations.find(worker => worker.worker_dni === user.dni )
+		if(exist)
+			return true
+		else
+			return false
+	}
+
 	const handleEdit = () => {
 		setEdit({
 			service_title: service.service_title,
@@ -36,7 +44,7 @@ export default function Cards({service, setServices, user}) {
 	const handleRemove = () => {
 		axios.delete(ApiRoutes.services.delete, { data: { id: `${service.id}` } })
 			.then((response) =>{
-				axios.post(ApiRoutes.services.user, { dni: user })
+				axios.post(ApiRoutes.services.user, { dni: user.id })
         	.then(response => {
 						let array = response.data.message;
 						if(array.length > 0){
@@ -54,6 +62,7 @@ export default function Cards({service, setServices, user}) {
 			.catch((error) => console.log(error))
 	}
 
+
 	return (
 		<div className='bg-white py-6 px-6 w-full rounded-xl md:min-w-[450px] md:max-w-[1000px] flex flex-col gap-4'>
 			<div className='flex flex-row items-center justify-between'>
@@ -65,7 +74,7 @@ export default function Cards({service, setServices, user}) {
 						}
 					</div>
 					<div className='font-semibold text-sm flex flex-col'>
-						<p>{service.User.name} {service.User.last_name}</p>	
+						<p>{service.User.name} {service.User.last_name} {service.id}</p>	
 						<p className='font-light text-xs'>{changeFormatDate(service.date_programmed)}</p>
 					</div>
 				</div>
@@ -92,8 +101,20 @@ export default function Cards({service, setServices, user}) {
 						<h1 className='font-bold text-2xl text-gray-darkest cursor-pointer hover:text-purple'>{service.service_title}</h1>
 					</Link>
 					<TruncateText text={service.service_description} maxLength={300}/>
+					{
+						[PageRoutes.dashboard.services.index].includes(pathname) &&
+						<p className='font-bold text-gray-darkest'>Postulados: <span className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-purple-dark'>{service.WorkerPostulations.length}</span></p>
+					}
 				</div>
 				<p className='text-gray-darkest font-semibold flex items-center gap-2'>Precio inicial: <span className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-lime-600'>$ {service.total_price}</span></p>
+				{
+					user?.is_worker && findPostulation()
+					?
+					<div className='w-full flex py-4 bg-gray-light text-gray-darkest font-bold justify-center rounded-xl'>
+						Ya estas postulado
+					</div>
+					:null
+					}
 			</div>
 		</div>
 	)
