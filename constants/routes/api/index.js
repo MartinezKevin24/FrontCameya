@@ -2,6 +2,7 @@ const ApiRoutes = {
   auth: { 
     login: "https://apicameya.semard.co/auth/login",
     google: "https://apicameya.semard.co/auth/google",
+    register: "https://apicameya.semard.co/auth/register",
   },
   profile: {
     update: "https://apicameya.semard.co/api/user/profile",

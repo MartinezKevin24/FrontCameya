@@ -7,6 +7,8 @@ import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import { RecoilRoot } from 'recoil';
 import Layout from 'components/Layout'
+import 'react-toastify/dist/ReactToastify.min.css'
+import {ToastContainer} from 'react-toastify'
 
 let persistor = persistStore(store);
 
@@ -19,6 +21,7 @@ function MyApp({ Component, pageProps }) {
           <PersistGate persistor={persistor}>
             <Layout>
               <Component {...pageProps} />
+              <ToastContainer/>
             </Layout>
           </PersistGate>
         </Provider>

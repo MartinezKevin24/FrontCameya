@@ -8,6 +8,7 @@ export default function Servicios() {
 
   const [services, setServices] = useState([])
   const user = useSelector(state => state.login?.value?.data)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const cancelTokenSource = axios.CancelToken.source();
@@ -30,17 +31,39 @@ export default function Servicios() {
     }
   }, [])
 
+  if(loading){
+    return(
+      <div className='z-0 sticky overflow-y-auto flex flex-col gap-6 whidth'>
+        <div className='p-2 border-b-2 border-black flex md:min-w-[300px] flex-col w-full md:max-w-[1000px]'>
+          <h1 className='text-3xl font-bold text-gray-darkest'>Mis Servicios</h1>
+        </div>
+        <div className='sticky'>
+          Loading...
+        </div>
+      </div>
+    )
+  }
+
+  if(services.length === 0){
+    return(
+      <div className='z-0 sticky overflow-y-auto flex flex-col gap-6 whidth'>
+        <div className='p-2 border-b-2 border-black flex md:min-w-[300px] flex-col w-full md:max-w-[1000px]'>
+          <h1 className='text-3xl font-bold text-gray-darkest'>Mis Servicios</h1>
+        </div>
+        <div className='sticky'>
+          No tienes servicios aún...
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='z-0 sticky overflow-y-auto flex flex-col gap-6 whidth'>
       <div className='p-2 border-b-2 border-black flex md:min-w-[300px] flex-col w-full md:max-w-[1000px]'>
         <h1 className='text-3xl font-bold text-gray-darkest'>Mis Servicios</h1>
       </div>
       {
-        services.length > 0
-        ?
         services.map((service, i) => <Cards key={i} service={service} setServices={setServices} user={user.dni}/>)
-        :
-        <p>Loading...</p>
       }
 
       <style jsx>{`

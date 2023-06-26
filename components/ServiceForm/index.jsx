@@ -23,9 +23,9 @@ const validationSchema = Yup.object().shape({
   "total_price": Yup.number()
     .min(1, 'El valor debe ser mayor a 1')
     .required("Este campo es obligatorio."),
-  "categories": Yup.array()
-    .min(1, 'Debes seleccionar al menos una categoría')
-    .of(Yup.string())
+  // "categories": Yup.array()
+  //   .min(1, 'Debes seleccionar al menos una categoría')
+  //   .of(Yup.string())
 })
 
 export default function ServiceForm({}) {
@@ -47,6 +47,7 @@ export default function ServiceForm({}) {
   }
 
   const onSubmit = (values, {resetForm, setSubmitting}) => {
+    const form_values = {...values, categories:[0,1,2,3]}
     axios.post(ApiRoutes.services.create, values)
       .then(response => {
         setServices([])
@@ -110,7 +111,7 @@ export default function ServiceForm({}) {
                           className={classNames(["w-full outline-none px-2 py-1 border-b-[1px] text-gray-darkest"])}/>
                       </div>
                       <FormError name={"total_price"}/>
-                      <CategoryField name="categories"/>
+                      {/* <CategoryField name="categories"/> */}
                     </div>
                   }
                 </div>

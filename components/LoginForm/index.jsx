@@ -1,4 +1,5 @@
 import Button from "components/Button";
+import React, {useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import loginImage from "assets/Login/login-image.jpg"
@@ -14,6 +15,7 @@ import axios from "axios";
 import { Formik, Form } from 'formik'
 import {useSelector} from "react-redux";
 import * as Yup from "yup"
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
 	"email": Yup.string()
@@ -29,6 +31,7 @@ export default function LoginForm(){
 	const { push } = useRouter();
 	const cookies = new Cookies();
 	const data = useSelector(state => { return state});
+	const [loading, setLoading] = useState(false)
 
 	const initialValues = {
 		"email": "",
@@ -36,12 +39,19 @@ export default function LoginForm(){
 	}
 
 	const onSubmit = async (values) => {
+		setLoading(true)
 		axios.post(ApiRoutes.auth.login, values,  { headers: {'Content-Type': 'application/json'} })
 			.then((response) => {
 				cookies.set("token", response.data.token, { path: '/' });
 				dispatch(insertData({data: response.data.message, token: response.data.token}))
+				setLoading(false)
 				push("/dashboard");
-			}).catch((error) => console.log(error))
+			}).catch((error) => {
+				toast.error("Email o contraseña incorrectos.", {
+					position: toast.POSITION.TOP_RIGHT
+				});
+				setLoading(false)
+			})
 	}
 
 	return(
@@ -84,6 +94,7 @@ export default function LoginForm(){
 											type="password"
 											placeholder="password"/>
 										<Button
+											loading={loading}
 											type="submit">
 												LOG IN
 										</Button>

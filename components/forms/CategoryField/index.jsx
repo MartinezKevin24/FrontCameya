@@ -21,16 +21,16 @@ export default function CategoryField({name}) {
       <div className='flex flex-col gap-4'>
         <select name={name} id={name} onChange={handleChange} className='w-full border-b-[1px] px-2 py-2 text-gray-dark outline-none'>
           <option value="" defaultChecked>Elige una categoría</option>
-          <option value="carpinteria">Carpintería</option>
-          <option value="plomeria">Plomería</option>
-          <option value="electricidad">Electricidad</option>
-          <option value="albañileria">Albañilería</option>
-          <option value="pintura">Pintura</option>
-          <option value="jardineria">Jardinería</option>
-          <option value="limpieza">Limpieza</option>
-          <option value="cerrajeria">Cerrajería</option>
-          <option value="cuidado de mascotas">Cuidado de mascotas</option>
-          <option value="llantería">Llantería</option>
+          <option value={0}>Carpintería</option>
+          <option value={1}>Plomería</option>
+          <option value={2}>Electricidad</option>
+          <option value={3}>Albañilería</option>
+          <option value={4}>Pintura</option>
+          <option value={5}>Jardinería</option>
+          <option value={6}>Limpieza</option>
+          <option value={7}>Cerrajería</option>
+          <option value={8}>Cuidado de mascotas</option>
+          <option value={9}>Llantería</option>
         </select>
         <div className='flex flex-wrap gap-2 p-3 mb-1 rounded-lg bg-gray-lightestplus w-full min-h-[60px]'>
           {
