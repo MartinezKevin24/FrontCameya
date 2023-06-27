@@ -43,6 +43,12 @@ export default function SideNavBar() {
       return false
   }
 
+  useEffect(() => {
+    if(!user){
+      push("/")
+    }
+  })
+
   const handleLogOut = async () => {
     await dispatch(clearData())
     push("/")

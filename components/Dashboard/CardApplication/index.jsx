@@ -18,8 +18,8 @@ export default function CardApplication({user, service}) {
 
   const handleAccept = () => {
     const form_values = {
-      id_worker: user.worker_dni,
-      id_service: service.id
+      worker_dni: user?.worker_dni,
+      service_id: service?.id
     }
 
     axios.put(ApiRoutes.services.updatePostulation, form_values)
@@ -31,11 +31,7 @@ export default function CardApplication({user, service}) {
         console.log(error)
       })
 
-    console.log(form_values)
-
   }
-
-  console.log(user)
 
   return (
     <div className='bg-blue-200 rounded-lg p-6 px-8 flex flex-col gap-3'>
@@ -64,7 +60,6 @@ export default function CardApplication({user, service}) {
           <p className='text-gray-darkest font-bold'>Descripción laboral:</p>
           <TruncateText text={user.Worker.service_detail} maxLength={200}/>
         </div>
-
       </div>
       <div className='flex flex-col md:flex-row md:gap-4 gap-3'>
         {/* <Button

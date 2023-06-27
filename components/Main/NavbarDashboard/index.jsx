@@ -3,8 +3,19 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {MdLogout} from "react-icons/md";
 import Logo from 'assets/Logo.png'
+import { useDispatch } from "react-redux";
+import { clearData } from "store/User/reducer"; 
+import { useRouter } from 'next/router';
 
 export default function NavbarDashboard() {
+
+  const { push } = useRouter()
+  const dispatch = useDispatch()
+
+  const handleLogOut = async () => {
+    await dispatch(clearData())
+    push("/")
+  }
 
   return (
     <div className='bg-white border-[2px] h-[56px] fixed w-full z-20'>
@@ -17,7 +28,7 @@ export default function NavbarDashboard() {
               </div>
               <div className="hidden md:flex md:flex-row">
                 <ul className="flex flex-row gap-x-10 items-center">
-                  <li><Link href="/login"><a className="flex flex-row items-center gap-x-2 hover:text-red text-gray-darkest text-2xl"><MdLogout/></a></Link></li>
+                  <li><div onClick={handleLogOut}><span className="flex flex-row items-center gap-x-2 hover:text-red text-gray-darkest text-2xl"><MdLogout/></span></div></li>
                 </ul>
               </div>
             </div>

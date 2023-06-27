@@ -23,9 +23,9 @@ const validationSchema = Yup.object().shape({
   "total_price": Yup.number()
     .min(1, 'El valor debe ser mayor a 1')
     .required("Este campo es obligatorio."),
-  // "categories": Yup.array()
-  //   .min(1, 'Debes seleccionar al menos una categoría')
-  //   .of(Yup.string())
+  "categories": Yup.array()
+    .min(1, 'Debes seleccionar al menos una categoría')
+    .of(Yup.string())
 })
 
 export default function ServiceForm({}) {
@@ -39,7 +39,7 @@ export default function ServiceForm({}) {
     service_title: '',
     service_description: '',
     categories: [],
-    client_dni: user.dni,
+    client_dni: user?.dni,
     date_programmed: new Date(),
     address: '',
     total_price: 0,
@@ -47,12 +47,29 @@ export default function ServiceForm({}) {
   }
 
   const onSubmit = (values, {resetForm, setSubmitting}) => {
-    const form_values = {...values, categories:[0,1,2,3]}
     axios.post(ApiRoutes.services.create, values)
       .then(response => {
         setServices([])
         setPage(1)
         resetForm()
+        axios.get(`${ApiRoutes.services.all}/${page}`)
+          .then(response => {
+            let array = response.data.message;
+            if(array.length > 0){
+              array.sort((a, b) => {
+                const today = new Date();
+                const diferenciaA = Math.abs(new Date(a.date_programmed) - today)
+                const diferenciaB = Math.abs(new Date(b.date_programmed) - today)
+                return diferenciaA - diferenciaB
+              })
+            }
+              
+            setServices((prev) => prev.concat(array))
+
+          })
+          .catch(error => {
+            console.log(error)
+          }) 
         setSubmitting(false)
         setOpen(false)
       })
@@ -73,7 +90,7 @@ export default function ServiceForm({}) {
             <Form className='flex flex-col gap-2'>
               <div className='flex flex-row w-full gap-4'>
                 <div className='rounded-full overflow-hidden h-12 w-[54px] block'>
-                  <img src={user.profile_picture} alt="profile photo" className='w-12 h-12 object-cover'/>
+                  <img src={user?.profile_picture} alt="profile photo" className='w-12 h-12 object-cover'/>
                 </div>
                 <div className={classNames(['w-full', {"flex items-center" : !open}])}>
                   <Field 

@@ -19,8 +19,6 @@ export default function Dashboard() {
   const setOpen = useSetRecoilState(openPostState);
   const refFather = useRef()
 
-  console.log(user)
-
   const handleClickOutside = (e) => {
     if(refService.current && !refService.current.contains(e.target) && refFather.current.contains(e.target))
       setOpen(false)

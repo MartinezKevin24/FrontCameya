@@ -1,14 +1,11 @@
 import Button from "components/Button";
 import React, {useState} from "react";
-import Link from "next/link";
 import Image from "next/image";
-import loginImage from "assets/Login/login-image.jpg"
 import FormField from 'components/forms/FormField'
 import { useDispatch } from "react-redux";
-import { insertData } from "store/User/reducer"; 
+import { insertAdminData } from "store/Admin/reducer"; 
 import ApiRoutes from "constants/routes/api"
-import jwtdecode from "jwt-decode";
-import { GoogleLogin } from "@react-oauth/google";
+import PageRoutes from "constants/routes/pages";
 import {useRouter} from "next/router";
 import Cookies from "universal-cookie"
 import axios from "axios";
@@ -43,10 +40,10 @@ export default function LoginForm(){
 		setLoading(true)
 		axios.post(ApiRoutes.admin.login, values,  { headers: {'Content-Type': 'application/json'} })
 			.then((response) => {
-				cookies.set("token", response.data.token, { path: '/' });
-				dispatch(insertData({data: response.data.message, token: response.data.token}))
+				cookies.set("tokenAdmin", response.data.token, { path: '/' });
+				dispatch(insertAdminData({data: response.data.message, token: response.data.token}))
 				setLoading(false)
-				push("/dashboard");
+				push(PageRoutes.admin.dashboard);
 			}).catch((error) => {
 				toast.error("Email o contraseña incorrectos.", {
 					position: toast.POSITION.TOP_RIGHT

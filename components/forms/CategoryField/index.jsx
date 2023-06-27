@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useField } from 'formik'
 import FormError from 'components/forms/FormError';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import ApiRoutes from 'constants/routes/api';
 export default function CategoryField({name}) {
 
   const [field, meta, helpers] = useField(name);
+  const [categories, setCategories] = useState([])
 
   const handleChange = (e) => {
     if(!field.value.includes(e.target.value) && e.target.value !== "")
@@ -24,7 +25,7 @@ export default function CategoryField({name}) {
 
     axios.get(ApiRoutes.categories.index, {cancelToken: cancelTokenSource.token})
       .then((response) => {
-        console.log(response)
+        setCategories(response.data.message)
       })
       .catch((error) => {
         console.log(error)
@@ -41,16 +42,9 @@ export default function CategoryField({name}) {
       <div className='flex flex-col gap-4'>
         <select name={name} id={name} onChange={handleChange} className='w-full border-b-[1px] px-2 py-2 text-gray-dark outline-none'>
           <option value="" defaultChecked>Elige una categoría</option>
-          <option value={0}>Carpintería</option>
-          <option value={1}>Plomería</option>
-          <option value={2}>Electricidad</option>
-          <option value={3}>Albañilería</option>
-          <option value={4}>Pintura</option>
-          <option value={5}>Jardinería</option>
-          <option value={6}>Limpieza</option>
-          <option value={7}>Cerrajería</option>
-          <option value={8}>Cuidado de mascotas</option>
-          <option value={9}>Llantería</option>
+          {
+            categories.map((category, i)=><option key={i} value={category.name}>{category.name}</option>)
+          }
         </select>
         <div className='flex flex-wrap gap-2 p-3 mb-1 rounded-lg bg-gray-lightestplus w-full min-h-[60px]'>
           {

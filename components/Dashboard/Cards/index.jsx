@@ -26,6 +26,8 @@ export default function Cards({service, setServices, user}) {
 			return false
 	}
 
+	console.log(service)
+
 	const handleEdit = () => {
 		setEdit({
 			service_title: service.service_title,
@@ -62,6 +64,18 @@ export default function Cards({service, setServices, user}) {
 			.catch((error) => console.log(error))
 	}
 
+	const serviceState = () => {
+		switch(service?.service_status){
+			case "Not Assigned":
+				return (<p className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-orange-500'>NO ASIGNADO</p>)
+			case "Assigned":
+				return (<p className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-blue-500'>ASIGNADO</p>)
+			case "Completed":
+				return (<p className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-lime-600'>COMPLETO</p>)
+			case "In Progress":
+				return (<p className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-gray-500'>EN PROGRESO</p>)
+		}
+	}
 
 	return (
 		<div className='bg-white py-6 px-6 w-full rounded-xl md:min-w-[450px] md:max-w-[1000px] flex flex-col gap-4'>
@@ -103,12 +117,18 @@ export default function Cards({service, setServices, user}) {
 					<TruncateText text={service.service_description} maxLength={300}/>
 					{
 						[PageRoutes.dashboard.services.index].includes(pathname) &&
+						<div className='flex gap-2 items-center mb-3'>
+							<span className='font-bold text-gray-darkest'>Estado: </span><span>{serviceState()}</span>
+						</div>
+					}
+					{
+						[PageRoutes.dashboard.services.index].includes(pathname) && service?.service_status === "Not Assigned" &&
 						<p className='font-bold text-gray-darkest'>Postulados: <span className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-purple-dark'>{service.WorkerPostulations.length}</span></p>
 					}
 				</div>
 				<p className='text-gray-darkest font-semibold flex items-center gap-2'>Precio inicial: <span className='text-gray-lightest font-bold py-1 px-2 rounded-md bg-lime-600'>$ {service.total_price}</span></p>
 				{
-					user?.is_worker && findPostulation()
+					user?.is_worker && findPostulation() && service?.service_status === "Not Assigned"
 					?
 					<div className='w-full flex py-4 bg-gray-light text-gray-darkest font-bold justify-center rounded-xl'>
 						Ya estas postulado

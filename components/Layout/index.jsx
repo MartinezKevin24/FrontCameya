@@ -2,6 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import PageRoutes from 'constants/routes/pages'
 import LayoutDashboard from 'components/Layout/Dashboard'
+import LayoutAdminDashaboard from 'components/Layout/AdminDashboard'
 
 export default function Layout({children}) {
 
@@ -20,6 +21,17 @@ export default function Layout({children}) {
       <LayoutDashboard>
         {children}
       </LayoutDashboard>
+    )
+
+  if([
+      PageRoutes.admin.dashboard,
+      PageRoutes.admin.categorias,
+      PageRoutes.admin.servicios
+    ].includes(pathname))
+    return (
+      <LayoutAdminDashaboard>
+        {children}
+      </LayoutAdminDashaboard>
     )
 
   return <div>{children}</div>

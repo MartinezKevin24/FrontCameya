@@ -10,6 +10,7 @@ export default function Botones({children, type, className="", color, loading, d
       className={classNames([className, "w-full p-2 py-4 rounded-md",
         {"opacity-60" : disabled}, 
         {"bg-emerald-600 focus:bg-emerald-400" : color === "green"},
+        {"bg-red hover:bg-red-600 focus:bg-red-500" : color === "red"},
         {"hover:bg-emerald-500" : color === "green" && !disabled},
         {"bg-purple hover:bg-purple-dark focus:bg-purple-darkest": !loading && !color},
         {"bg-purple-light": loading && !color}])} 

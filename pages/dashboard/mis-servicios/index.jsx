@@ -15,12 +15,12 @@ export default function Servicios() {
 
     let url;
 
-    if(user.is_worker)
+    if(user?.is_worker)
       url = ApiRoutes.services.worker
     else
       url = ApiRoutes.services.user
 
-    axios.post(url, {dni: user.dni}, { cancelToken: cancelTokenSource.token })
+    axios.post(url, {dni: user?.dni}, { cancelToken: cancelTokenSource.token })
         .then(response => {
           let array = response.data.message;
           array.sort((a, b) => {
