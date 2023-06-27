@@ -13,7 +13,7 @@ import { Formik, Form } from 'formik'
 import {useSelector} from "react-redux";
 import * as Yup from "yup"
 import { toast } from "react-toastify";
-import Logo from 'assets/Logo.png'
+import Logo from 'assets/logo.png'
 
 const validationSchema = Yup.object({
 	"email": Yup.string()
