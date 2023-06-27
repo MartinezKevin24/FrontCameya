@@ -10,7 +10,7 @@ export default function TermsAndConditions() {
       <p className="mb-4">Fecha de entrada en vigencia: 20 de junio de 2023</p>
 
       <p className="mb-4">
-        Estos Términos y Condiciones ("T&C") establecen los derechos y
+        {`Estos Términos y Condiciones ("T&C") establecen los derechos y
         obligaciones legales entre los usuarios ("Usuario", "Usted", "Cliente" o
         "Trabajador") y la aplicación de intermediación de trabajadores
         informales ("Aplicación", "Nosotros", "Nos" o "Plataforma") llamada
@@ -18,7 +18,7 @@ export default function TermsAndConditions() {
         servicios informales. Al acceder y utilizar nuestra Aplicación, usted
         acepta cumplir con estos T&C en su totalidad. Si no está de acuerdo con
         alguno de estos términos, le recomendamos no utilizar nuestra
-        Aplicación.
+        Aplicación.`}
       </p>
 
       <h2 className="text-xl font-bold mb-2">1. Uso de la Aplicación</h2>
