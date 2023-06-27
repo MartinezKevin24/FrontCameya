@@ -1,5 +1,5 @@
 import React from 'react'
-import SideNavBarAdmin from 'components/Main/SideNavBarAdmin'
+import SideNavBarAdmin from "../../Main/SideNavbarAdmin"
 
 export default function AdminDashboard({children}) {
   return (
