@@ -8,7 +8,7 @@ import PageRoutes from "constants/routes/pages";
 
 export default function Login(){
 
-	const user = useSelector(state => state.login.value.data)
+	const user = useSelector(state => state?.login?.value?.data)
 	const { push } = useRouter()
 
 	useEffect(() => {
