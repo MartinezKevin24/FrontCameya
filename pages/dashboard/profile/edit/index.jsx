@@ -113,13 +113,13 @@ export default function Edit() {
                         disabled={true}/>
                     </div>
                   </div>
-                  <div>
+                  {/* <div>
                     <label htmlFor="birth_date" className='text-gray-darkest text-sm'>Fecha de nacimiento</label>
                     <Field
                       name="birth_date"
                       id="birth_date"
                       component={DateField}/>
-                  </div>
+                  </div> */}
                   <div>
                     <label htmlFor="email" className='text-gray-darkest text-sm'>Email</label>
                     <FormField
