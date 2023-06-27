@@ -8,7 +8,7 @@ import PageRoutes from "constants/routes/pages";
 
 export default function AdminLogin(){
 
-	const user = useSelector(state => state.admin.value.data)
+	const user = useSelector(state => state?.admin?.value?.data)
 	const { push } = useRouter()
 
 	useEffect(() => {
