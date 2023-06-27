@@ -16,6 +16,7 @@ export default function Layout({children}) {
       PageRoutes.dashboard.services.page,
       PageRoutes.dashboard.services.edit,
       PageRoutes.dashboard.ajustes,
+      PageRoutes.dashboard.filtrado
     ].includes(pathname))
     return (
       <LayoutDashboard>
