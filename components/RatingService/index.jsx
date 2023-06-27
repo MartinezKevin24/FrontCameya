@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Button from 'components/Button'
 import { FaStar } from 'react-icons/fa';
 import { useFormik } from 'formik';
@@ -13,6 +13,7 @@ export default function RatingService({id, setFinished}) {
 
   const user = useSelector(state => state?.login?.value?.data)
   const {push} = useRouter()
+  const [loading, setLoading] = useState(false);
 
   const handleFinishService = () => {
 
@@ -29,9 +30,11 @@ export default function RatingService({id, setFinished}) {
           position: toast.POSITION.TOP_RIGHT
         });
         setFinished(false)
+        setLoading(false)
         push(PageRoutes.dashboard.services.index)
 			})
 			.catch((err) => {
+        setLoading(false)
 				console.log(err)
 			})
 
@@ -44,6 +47,7 @@ export default function RatingService({id, setFinished}) {
     onSubmit: (values) => {
 
       let url
+      setLoading(true)
 
       if(user?.is_worker)
         url = ApiRoutes.services.ratingWorker
@@ -53,9 +57,11 @@ export default function RatingService({id, setFinished}) {
       axios.put(url, { dni: user.dni, service_id: id, score: values.rating})
         .then(response => {
           handleFinishService()
+          setLoading(false)
         })
         .catch(error => {
           console.log(error)
+          setLoading(false)
         })
 
     },
@@ -95,6 +101,7 @@ export default function RatingService({id, setFinished}) {
           </div>
         <Button 
           color={"green"}
+          loading={loading}
           type={"submit"}>
           Calificar
         </Button>
