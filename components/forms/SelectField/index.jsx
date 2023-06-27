@@ -1,20 +1,43 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
+import ApiRoutes from 'constants/routes/api'
+import { useRouter } from 'next/router'
 
 export default function SelectField({name}) {
+
+  const [categories, setCategories] = useState([])
+  const { push } = useRouter()
+
+  const handleChange = (e) => {
+    if(e.target.value !== "")
+      push(`/dashboard/filtrado/${e.target.value}`)
+  }
+
+  useEffect(() => {
+
+    const cancelTokenSource = axios.CancelToken.source()
+
+    axios.get(ApiRoutes.categories.index, {cancelToken: cancelTokenSource.token})
+      .then((response) => {
+        setCategories(response.data.message)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    return () =>{
+      cancelTokenSource.cancel();
+    }
+
+  }, [])
+
   return (
     <div>
-      <select name={name} id={name} className='w-full border-b-[1px] px-2 py-2 text-gray-dark outline-none'>
+      <select name={name} id={name} onChange={handleChange} className='w-full border-b-[1px] px-2 py-2 text-gray-dark outline-none'>
           <option value="" defaultChecked>Elige una categoría</option>
-          <option value="carpinteria">Carpintería</option>
-          <option value="plomeria">Plomería</option>
-          <option value="electricidad">Electricidad</option>
-          <option value="albañileria">Albañilería</option>
-          <option value="pintura">Pintura</option>
-          <option value="jardineria">Jardinería</option>
-          <option value="limpieza">Limpieza</option>
-          <option value="cerrajeria">Cerrajería</option>
-          <option value="cuidado de mascotas">Cuidado de mascotas</option>
-          <option value="llantería">Llantería</option>
+          {
+            categories.map((category, i)=><option key={i} value={category.name}>{category.name}</option>)
+          }
         </select>
     </div>
   )

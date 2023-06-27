@@ -11,6 +11,7 @@ const PageRoutes = {
       edit: "/dashboard/mis-servicios/edit/[slug]",
     },
     ajustes: "/dashboard/ajustes",
+    filtrado: "/dashboard/filtrado/[slug]"
   },
   admin:{
     dashboard: "/admin/dashboard",
