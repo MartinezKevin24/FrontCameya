@@ -60,8 +60,7 @@ export default function Edit() {
   const onSubmit = (values) => {
 
     const form_values = {
-      ...values,
-      birth_date: changeFormatDate(values?.birth_date)
+      ...values
     }
 
     axios.put(ApiRoutes.profile.update, form_values, { headers: {'Content-Type': 'application/json'} })
