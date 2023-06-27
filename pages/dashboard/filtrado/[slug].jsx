@@ -18,7 +18,7 @@ export default function Filtrado() {
     const cancelTokenSource = axios.CancelToken.source();
 
     const getServices = () => {
-      axios.post(`${ApiRoutes.filtrado}${query?.slug}`, { cancelToken: cancelTokenSource.token })
+      axios.post(`${ApiRoutes.filtrado}`, { categories: [query?.slug] },{ cancelToken: cancelTokenSource.token })
         .then(response => {
           let array = response.data.message;
           if(array.length > 0){
@@ -44,14 +44,16 @@ export default function Filtrado() {
       cancelTokenSource.cancel();
     }
 
-  }, [])
+  }, [query])
+
+  console.log(filtrado)
 
   return (
     <div className='z-0 sticky overflow-y-auto flex flex-col gap-6 whidth'>
       {
         filtrado.length > 0 ?
         <div>
-          <div className='w-96 gap-3 items-center flex flex-row'>
+          <div className='w-96 gap-3 items-center flex flex-row mb-4'>
             <div className='font-bold text-gray-darkest'>Filtrar categorias:</div>
             <SelectField/>
           </div>
@@ -67,7 +69,16 @@ export default function Filtrado() {
             </div>
           }
         </div>
-        :null
+        :
+        <div>
+          <div className='w-96 gap-3 items-center flex flex-row mb-4'>
+            <div className='font-bold text-gray-darkest'>Filtrar categorias:</div>
+            <SelectField/>
+          </div>
+          <div className='sticky'>
+            Ooops, No tenemos servicios disponibles actualmente...
+          </div>
+        </div>
       }
       <style jsx>{`
 

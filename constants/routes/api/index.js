@@ -34,7 +34,7 @@ const ApiRoutes = {
     deleteCategory: "https://apicameya.semard.co/admin/deleteCategory/",
     deleteService: "https://apicameya.semard.co/admin/deleteService/",
   },
-  filtrado: "https://apicameya.semard.co/api/service/"
+  filtrado: "https://apicameya.semard.co/api/service/scategory"
 }
 
 export default ApiRoutes
