@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {MdLogout} from "react-icons/md";
-import Logo from 'assets/Logo.png'
+import Logo from 'assets/logo.png'
 import { useDispatch } from "react-redux";
 import { clearData } from "store/User/reducer"; 
 import { useRouter } from 'next/router';

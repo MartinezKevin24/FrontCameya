@@ -9,7 +9,7 @@ import { clearAdminData } from "store/Admin/reducer";
 import PageRoutes from 'constants/routes/pages';
 import { AiFillHome, AiTwotoneMail, AiFillSetting } from 'react-icons/ai'
 
-export default function SideNavBar() {
+export default function SideNavBarAdmin() {
 
   const user = useSelector(state => state.admin.value.data)
   const dispatch = useDispatch()
