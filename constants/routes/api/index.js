@@ -21,8 +21,8 @@ const ApiRoutes = {
     cancelPostulation: "https://apicameya.semard.co/api/worker/RetireFromService",
     terminateWorkerService: "https://apicameya.semard.co/api/worker/terminateService",
     terminateUserService: "https://apicameya.semard.co/api/user/terminateService",
-    ratingUser: "https://apicameya.semard.co/api/worker/score",
-    ratingWorker: "https://apicameya.semard.co/api/user/score"
+    ratingUser: "http://localhost:4000/api/worker/score",
+    ratingWorker: "http://localhost:4000/api/user/score"
   },
   categories: {
     index: "https://apicameya.semard.co/api/service/getCategories"

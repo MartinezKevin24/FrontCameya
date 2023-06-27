@@ -23,8 +23,6 @@ const validationSchema = Yup.object({
     .required("Este campo es obligatorio."),
   "dni": Yup.string()
     .required("Este campo es obligatorio."),
-  "birth_date": Yup.date()
-    .required("Este campo es obligatorio."),
   "email": Yup.string()
     .email("Por favor, ingrese un email valido.")
     .required("Este campo es obligatorio."),
@@ -41,15 +39,19 @@ export default function Edit() {
   const { push } = useRouter()
   const { changeFormatDate } = useFormats()
 
-  const initalValues = user ?{
-    ...user,
-    birth_date: new Date(user.birth_date.replace(/-/g, '\/'))
+  const initalValues = user ? {
+    "name": user.name,
+    "last_name": user.last_name,
+    "dni_type": user.dni_type,
+    "dni": user.dni,
+    "email": user.email,
+    "address": user.address,
+    "phone": user.phone
   } : {
     "name": "",
     "last_name": "",
     "dni_type": "",
     "dni": "",
-    "birth_date": new Date(),
     "email": "",
     "address": "",
     "phone": ""
@@ -75,8 +77,11 @@ export default function Edit() {
       <WhiteBox>
         <Formik initialValues={initalValues} onSubmit={onSubmit} validationSchema={validationSchema}>
           {
-            ({values}) => (
+            ({values, errors}) => (
               <Form>
+                {
+                  console.log(errors, values )
+                }
                 <div className="flex flex-col gap-3">
                   <h1 className='text-gray-darkest text-2xl font-bold'>Tu información de Cameya</h1>
                   <div>
