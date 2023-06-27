@@ -11,12 +11,14 @@ import { useRecoilState } from 'recoil';
 import editService from 'atoms/services/editService';
 import axios from 'axios'
 import ApiRoutes from 'constants/routes/api'
+import { useSelector } from 'react-redux'
 
 export default function Cards({service, setServices, user}) {
 
 	const { changeFormatDate } = useFormats()
 	const { pathname, push } = useRouter()
 	const [edit, setEdit] = useRecoilState(editService)
+	const dataUser = useSelector(state => state?.login?.value?.data)
 
 	const findPostulation = () =>{
 		const exist = service?.WorkerPostulations.find(worker => worker.worker_dni === user.dni )
@@ -94,7 +96,7 @@ export default function Cards({service, setServices, user}) {
 				</div>
 				<div className='flex flex-row items-center justify-center'>
 					{
-						[PageRoutes.dashboard.services.index].includes(pathname)
+						[PageRoutes.dashboard.services.index].includes(pathname) && !dataUser?.is_worker
 						?
 						<div className='flex flex-row gap-3'>
 							<p className='text-2xl text-gray-dark hover:text-red cursor-pointer' onClick={()=>handleRemove()}>
