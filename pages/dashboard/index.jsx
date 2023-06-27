@@ -8,6 +8,7 @@ import openPostState from 'atoms/services/openPostState'
 import servicesState from 'atoms/services/servicesState'
 import pageState from 'atoms/services/pageState'
 import { useSelector } from 'react-redux';
+import SelectField from 'components/forms/SelectField'
 
 export default function Dashboard() {
 
@@ -82,6 +83,10 @@ export default function Dashboard() {
           <PostService ref={refService}/>
         </div>
       }
+      <div className='w-96 gap-3 items-center flex flex-row'>
+        <div className='font-bold text-gray-darkest'>Filtrar categorias:</div>
+        <SelectField/>
+      </div>
       {
         services.length !== 0 
         ?
