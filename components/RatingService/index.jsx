@@ -11,7 +11,7 @@ import PageRoutes from 'constants/routes/pages';
 
 export default function RatingService({id, setFinished}) {
 
-  const user = useSelector(state => state.login.value.data)
+  const user = useSelector(state => state?.login?.value?.data)
   const {push} = useRouter()
 
   const handleFinishService = () => {

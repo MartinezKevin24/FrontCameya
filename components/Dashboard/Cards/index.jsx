@@ -90,7 +90,7 @@ export default function Cards({service, setServices, user}) {
 						}
 					</div>
 					<div className='font-semibold text-sm flex flex-col'>
-						<p>{service.User.name} {service.User.last_name} {service.id}</p>	
+						<p>{service.User.name} {service.User.last_name}</p>	
 						<p className='font-light text-xs'>{changeFormatDate(service.date_programmed)}</p>
 					</div>
 				</div>
